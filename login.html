@@ -965,6 +965,39 @@
       }
     });
   }
+  <script type="module">
+  // Add this to your existing signup script
+  const urlParams = new URLSearchParams(window.location.search);
+  const referralCode = urlParams.get('ref');
+  if (referralCode) {
+    document.getElementById('referralCode').value = referralCode;
+    showNotification('🎉 Referral Detected!', `You were referred by a friend! Both of you will get UGX 5,000 bonus after your first deposit!`, 'success');
+  }
+  
+  // In your signup function, after creating user, add:
+  if (referralCode) {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("referralCode", "==", referralCode.toUpperCase()));
+    const querySnap = await getDocs(q);
+    if (!querySnap.empty) {
+      const referrerDoc = querySnap.docs[0];
+      const referrerRef = doc(db, "users", referrerDoc.id);
+      await updateDoc(referrerRef, {
+        referrals: increment(1),
+        referralBonus: increment(5000),
+        totalBalance: increment(5000)
+      });
+      
+      await addDoc(collection(db, "users", referrerDoc.id, "transactions"), {
+        type: 'referral_bonus',
+        amount: 5000,
+        referredUser: user.uid,
+        referredEmail: email,
+        date: serverTimestamp(),
+        status: 'completed'
+      });
+    }
+  }
 </script>
 </body>
 </html>
