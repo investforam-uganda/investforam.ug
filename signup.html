@@ -1,104 +1,973 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Foram Invest</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1e3c4a 0%, #2c5f8a 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .auth-container {
-            width: 100%;
-            max-width: 450px;
-        }
-        .auth-card {
-            background: white;
-            border-radius: 24px;
-            padding: 1.8rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-        .auth-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .auth-logo {
-            font-size: 1.3rem;
-            font-weight: 800;
-            text-decoration: none;
-            color: #1e293b;
-        }
-        .auth-header h2 {
-            font-size: 1.5rem;
-            margin-top: 0.5rem;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.3rem;
-            font-weight: 500;
-            font-size: 0.85rem;
-            color: #4a5568;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 0.7rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 0.8rem;
-        }
-        .btn-primary {
-            background: #1f3b4c;
-            color: white;
-            border: none;
-            padding: 0.8rem;
-            border-radius: 40px;
-            width: 100%;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 0.5rem;
-        }
-        .checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-        }
-        .auth-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e2e8f0;
-        }
-        .auth-footer a {
-            color: #2c5f8a;
-            text-decoration: none;
-        }
-        .error-message, .success-message {
-            padding: 0.6rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            text-align: center;
-            font-size: 0.85rem;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Foram Invest | Sign In & Sign Up</title>
+  <!-- Google Fonts + Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #0B1120 0%, #111827 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* animated background orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .orb-1 {
+      width: 40vw;
+      height: 40vw;
+      background: #10b981;
+      top: -10%;
+      left: -10%;
+      animation: float 18s infinite alternate;
+    }
+
+    .orb-2 {
+      width: 35vw;
+      height: 35vw;
+      background: #059669;
+      bottom: -15%;
+      right: -5%;
+      animation: float 22s infinite alternate-reverse;
+    }
+
+    .orb-3 {
+      width: 25vw;
+      height: 25vw;
+      background: #34d399;
+      top: 40%;
+      left: 70%;
+      animation: float 25s infinite alternate;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 40px) scale(1.1); }
+    }
+
+    /* main card container */
+    .auth-container {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border-radius: 2.5rem;
+      padding: 0.5rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      width: 100%;
+      max-width: 1000px;
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+
+    .card-wrapper {
+      background: #0f172a;
+      border-radius: 2rem;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* left side — brand panel */
+    .brand-panel {
+      flex: 1.2;
+      background: linear-gradient(135deg, #0a0f1c 0%, #111827 100%);
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(125deg, #10b981, #059669);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: white;
+      box-shadow: 0 8px 20px -6px rgba(16,185,129,0.4);
+    }
+
+    .logo-text {
+      font-size: 1.7rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #f0f9ff, #c4e6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-quote {
+      margin-top: 3rem;
+    }
+
+    .brand-quote h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1.3;
+      background: linear-gradient(120deg, #e2e8f0, #a5f3fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .brand-quote p {
+      color: #94a3b8;
+      line-height: 1.5;
+      font-size: 0.95rem;
+      max-width: 85%;
+    }
+
+    .feature-list {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: #cbd5e6;
+      font-size: 0.9rem;
+    }
+
+    .feature-item i {
+      color: #10b981;
+      font-size: 1.1rem;
+      width: 24px;
+    }
+
+    /* right side — forms */
+    .forms-panel {
+      flex: 1.5;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      padding: 2rem 2rem 2rem 2rem;
+      transition: all 0.2s;
+    }
+
+    .form-toggle {
+      display: flex;
+      gap: 0.5rem;
+      background: #1e293b;
+      padding: 0.35rem;
+      border-radius: 60px;
+      width: fit-content;
+      margin-bottom: 2rem;
+    }
+
+    .toggle-btn {
+      padding: 0.6rem 1.6rem;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #94a3b8;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .toggle-btn.active {
+      background: #10b981;
+      color: white;
+      box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+    }
+
+    .form-box {
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .form-box.hidden {
+      display: none;
+    }
+
+    .form-title {
+      font-size: 1.9rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #f1f5f9;
+      letter-spacing: -0.3px;
+    }
+
+    .form-sub {
+      color: #64748b;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.4rem;
+      position: relative;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #cbd5e1;
+    }
+
+    .input-icon {
+      position: relative;
+    }
+
+    .input-icon i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5b6e8c;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .input-icon input {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 2.6rem;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1.2rem;
+      font-size: 0.95rem;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .input-icon input:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+    }
+
+    .input-icon input::placeholder {
+      color: #4a5b7a;
+    }
+
+    /* Password strength indicator */
+    .password-strength {
+      margin-top: 0.5rem;
+      height: 4px;
+      background: #334155;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .strength-bar {
+      height: 100%;
+      width: 0;
+      transition: width 0.3s, background-color 0.3s;
+      border-radius: 2px;
+    }
+
+    .strength-text {
+      font-size: 0.7rem;
+      margin-top: 0.3rem;
+      color: #94a3b8;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      font-size: 0.85rem;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #cbd5e1;
+    }
+
+    .checkbox input {
+      accent-color: #10b981;
+      width: 16px;
+      height: 16px;
+    }
+
+    .forgot-link {
+      color: #10b981;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .action-btn {
+      width: 100%;
+      background: linear-gradient(95deg, #10b981, #059669);
+      border: none;
+      padding: 0.9rem;
+      border-radius: 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 18px -8px rgba(16,185,129,0.4);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px -8px #10b981;
+    }
+
+    .social-login {
+      text-align: center;
+    }
+
+    .social-login p {
+      font-size: 0.8rem;
+      color: #5b6e8c;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .social-icon {
+      background: #1e293b;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #cbd5e1;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 1px solid #334155;
+    }
+
+    .social-icon:hover {
+      background: #10b981;
+      color: white;
+      transform: scale(1.05);
+      border-color: #10b981;
+    }
+
+    .switch-message {
+      text-align: center;
+      margin-top: 1.8rem;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .switch-link {
+      color: #10b981;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 0.3rem;
+    }
+
+    .switch-link:hover {
+      text-decoration: underline;
+    }
+
+    .error-msg {
+      color: #f87171;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      margin-left: 0.5rem;
+    }
+
+    .success-msg {
+      color: #10b981;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      margin-left: 0.5rem;
+    }
+
+    /* toast message */
+    .toast-notify {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      background: #1e293b;
+      backdrop-filter: blur(12px);
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      color: white;
+      font-weight: 500;
+      font-size: 0.9rem;
+      box-shadow: 0 12px 28px -10px black;
+      z-index: 200;
+      transition: all 0.2s;
+      opacity: 0;
+      pointer-events: none;
+      border-left: 4px solid #10b981;
+    }
+
+    /* loading spinner */
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* responsive */
+    @media (max-width: 780px) {
+      .brand-panel {
+        display: none;
+      }
+      .forms-panel {
+        flex: 1;
+        padding: 2rem 1.5rem;
+      }
+      .auth-container {
+        max-width: 500px;
+      }
+      .form-title {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="auth-container">
+  <div class="card-wrapper">
+    <!-- left brand section -->
+    <div class="brand-panel">
+      <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+        <span class="logo-text">FORAM INVEST</span>
+      </div>
+      <div class="brand-quote">
+        <h2>Start your<br>investment journey</h2>
+        <p>Join thousands of investors growing their wealth with Foram Invest. Secure, transparent, and profitable.</p>
+      </div>
+      <div class="feature-list">
+        <div class="feature-item"><i class="fas fa-shield-alt"></i> <span>Bank-level security</span></div>
+        <div class="feature-item"><i class="fas fa-chart-line"></i> <span>Up to 50% annual returns</span></div>
+        <div class="feature-item"><i class="fas fa-gift"></i> <span>UGX 5,000 referral bonus</span></div>
+        <div class="feature-item"><i class="fas fa-headset"></i> <span>24/7 customer support</span></div>
+      </div>
+    </div>
+
+    <!-- right dynamic forms panel -->
+    <div class="forms-panel">
+      <div class="form-toggle">
+        <button class="toggle-btn active" id="btnSignInTab">Sign In</button>
+        <button class="toggle-btn" id="btnSignUpTab">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginFormBox" class="form-box">
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Sign in to access your investment portfolio</div>
+        
+        <div class="input-group">
+          <label>Email address</label>
+          <div class="input-icon">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="you@example.com">
+          </div>
+          <div id="loginEmailError" class="error-msg"></div>
+        </div>
+        
+        <div class="input-group">
+          <label>Password</label>
+          <div class="input-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+          </div>
+          <div id="loginPasswordError" class="error-msg"></div>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox">
+            <input type="checkbox" id="rememberMe"> <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+        </div>
+        
+        <button class="action-btn" id="loginBtn"><i class="fas fa-arrow-right-to-bracket" style="margin-right: 8px;"></i> Sign In</button>
+        
+        <div class="social-login">
+          <p>Or continue with</p>
+          <div class="social-icons">
+            <div class="social-icon"><i class="fab fa-google"></i></div>
+            <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+            <div class="social-icon"><i class="fab fa-apple"></i></div>
+          </div>
+        </div>
+        <div class="switch-message">
+          Don't have an account? <span class="switch-link" id="switchToSignUp">Create one now</span>
+        </div>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div id="signupFormBox" class="form-box hidden">
+        <div class="form-title">Create Account</div>
+        <div class="form-sub">Start your investment journey today</div>
+        
+        <div class="input-group">
+          <label>Full name</label>
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
+            <input type="text" id="signupName" placeholder="John Doe">
+          </div>
+          <div id="signupNameError" class="error-msg"></div>
+        </div>
+        
+        <div class="input-group">
+          <label>Email address</label>
+          <div class="input-icon">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="signupEmail" placeholder="you@example.com">
+          </div>
+          <div id="signupEmailError" class="error-msg"></div>
+        </div>
+        
+        <div class="input-group">
+          <label>Phone number</label>
+          <div class="input-icon">
+            <i class="fas fa-phone"></i>
+            <input type="tel" id="signupPhone" placeholder="0771234567">
+          </div>
+          <div id="signupPhoneError" class="error-msg"></div>
+        </div>
+        
+        <div class="input-group">
+          <label>Password</label>
+          <div class="input-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="signupPassword" placeholder="Create a strong password">
+          </div>
+          <div class="password-strength">
+            <div class="strength-bar" id="strengthBar"></div>
+          </div>
+          <div class="strength-text" id="strengthText"></div>
+          <div id="signupPasswordError" class="error-msg"></div>
+        </div>
+        
+        <div class="input-group">
+          <label>Confirm password</label>
+          <div class="input-icon">
+            <i class="fas fa-check-circle"></i>
+            <input type="password" id="signupConfirm" placeholder="Confirm your password">
+          </div>
+          <div id="signupConfirmError" class="error-msg"></div>
+        </div>
+        
+        <div class="input-group">
+          <label>Referral code (optional)</label>
+          <div class="input-icon">
+            <i class="fas fa-gift"></i>
+            <input type="text" id="referralCode" placeholder="Enter referral code if you have one">
+          </div>
+        </div>
+        
+        <div class="form-options">
+          <label class="checkbox">
+            <input type="checkbox" id="termsCheck"> <span>I agree to the <a href="#" style="color:#10b981;">Terms of Service</a> & <a href="#" style="color:#10b981;">Privacy Policy</a></span>
+          </label>
+        </div>
+        
+        <button class="action-btn" id="signupBtn"><i class="fas fa-user-plus" style="margin-right: 8px;"></i> Create Account</button>
+        
+        <div class="social-login">
+          <p>Or sign up with</p>
+          <div class="social-icons">
+            <div class="social-icon"><i class="fab fa-google"></i></div>
+            <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+            <div class="social-icon"><i class="fab fa-apple"></i></div>
+          </div>
+        </div>
+        <div class="switch-message">
+          Already have an account? <span class="switch-link" id="switchToSignIn">Sign in</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toastMsg" class="toast-notify"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCX-ag3dli4j1DyP4nJKiO58yOEyQy-_5c",
+    authDomain: "invest-foram-platform.firebaseapp.com",
+    projectId: "invest-foram-platform",
+    storageBucket: "invest-foram-platform.firebasestorage.app",
+    messagingSenderId: "284475751069",
+    appId: "1:284475751069:web:008f29e8696f483c19b274"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // DOM Elements
+  const loginBox = document.getElementById('loginFormBox');
+  const signupBox = document.getElementById('signupFormBox');
+  const btnSignInTab = document.getElementById('btnSignInTab');
+  const btnSignUpTab = document.getElementById('btnSignUpTab');
+  const switchToSignUp = document.getElementById('switchToSignUp');
+  const switchToSignIn = document.getElementById('switchToSignIn');
+  
+  // Inputs
+  const loginEmail = document.getElementById('loginEmail');
+  const loginPassword = document.getElementById('loginPassword');
+  const signupName = document.getElementById('signupName');
+  const signupEmail = document.getElementById('signupEmail');
+  const signupPhone = document.getElementById('signupPhone');
+  const signupPassword = document.getElementById('signupPassword');
+  const signupConfirm = document.getElementById('signupConfirm');
+  const referralCode = document.getElementById('referralCode');
+  const termsCheck = document.getElementById('termsCheck');
+  const rememberMe = document.getElementById('rememberMe');
+
+  // Error spans
+  const loginEmailErr = document.getElementById('loginEmailError');
+  const loginPasswordErr = document.getElementById('loginPasswordError');
+  const signupNameErr = document.getElementById('signupNameError');
+  const signupEmailErr = document.getElementById('signupEmailError');
+  const signupPhoneErr = document.getElementById('signupPhoneError');
+  const signupPasswordErr = document.getElementById('signupPasswordError');
+  const signupConfirmErr = document.getElementById('signupConfirmError');
+
+  const toast = document.getElementById('toastMsg');
+
+  function showToast(message, isError = false) {
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) scale(1)';
+    toast.style.borderLeftColor = isError ? '#f87171' : '#10b981';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) scale(0.9)';
+    }, 3000);
+  }
+
+  function showLoading(button, show) {
+    if (show) {
+      button.disabled = true;
+      button.innerHTML = '<span class="loading-spinner"></span> Processing...';
+    } else {
+      button.disabled = false;
+      if (button.id === 'loginBtn') {
+        button.innerHTML = '<i class="fas fa-arrow-right-to-bracket" style="margin-right: 8px;"></i> Sign In';
+      } else {
+        button.innerHTML = '<i class="fas fa-user-plus" style="margin-right: 8px;"></i> Create Account';
+      }
+    }
+  }
+
+  function clearErrors() {
+    const allErrors = document.querySelectorAll('.error-msg');
+    allErrors.forEach(err => err.textContent = '');
+  }
+
+  // Password strength checker
+  function checkPasswordStrength(password) {
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+    if (password.match(/\d/)) strength++;
+    if (password.match(/[^A-Za-z0-9]/)) strength++;
+    
+    const colors = ['#ef4444', '#f59e0b', '#fbbf24', '#10b981', '#059669'];
+    const texts = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+    
+    document.getElementById('strengthBar').style.width = `${(strength + 1) * 20}%`;
+    document.getElementById('strengthBar').style.backgroundColor = colors[strength];
+    document.getElementById('strengthText').textContent = `Password strength: ${texts[strength]}`;
+    document.getElementById('strengthText').style.color = colors[strength];
+    return strength;
+  }
+
+  if (signupPassword) {
+    signupPassword.addEventListener('input', (e) => checkPasswordStrength(e.target.value));
+  }
+
+  // Switch UI between login & signup
+  function setActiveForm(formType) {
+    clearErrors();
+    if (formType === 'login') {
+      loginBox.classList.remove('hidden');
+      signupBox.classList.add('hidden');
+      btnSignInTab.classList.add('active');
+      btnSignUpTab.classList.remove('active');
+    } else {
+      loginBox.classList.add('hidden');
+      signupBox.classList.remove('hidden');
+      btnSignUpTab.classList.add('active');
+      btnSignInTab.classList.remove('active');
+    }
+  }
+
+  btnSignInTab.addEventListener('click', () => setActiveForm('login'));
+  btnSignUpTab.addEventListener('click', () => setActiveForm('signup'));
+  if (switchToSignUp) switchToSignUp.addEventListener('click', () => setActiveForm('signup'));
+  if (switchToSignIn) switchToSignIn.addEventListener('click', () => setActiveForm('login'));
+
+  // Email validation
+  function isValidEmail(email) {
+    return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
+  }
+
+  // SIGNUP logic with Firebase
+  async function handleSignup() {
+    clearErrors();
+    let isValid = true;
+    const nameVal = signupName.value.trim();
+    const emailVal = signupEmail.value.trim();
+    const phoneVal = signupPhone.value.trim();
+    const passVal = signupPassword.value;
+    const confirmVal = signupConfirm.value;
+
+    if (!nameVal) {
+      signupNameErr.textContent = 'Full name is required';
+      isValid = false;
+    } else if (nameVal.length < 2) {
+      signupNameErr.textContent = 'Name must be at least 2 characters';
+      isValid = false;
+    }
+
+    if (!emailVal) {
+      signupEmailErr.textContent = 'Email address is required';
+      isValid = false;
+    } else if (!isValidEmail(emailVal)) {
+      signupEmailErr.textContent = 'Enter a valid email address';
+      isValid = false;
+    }
+
+    if (!passVal) {
+      signupPasswordErr.textContent = 'Password is required';
+      isValid = false;
+    } else if (passVal.length < 6) {
+      signupPasswordErr.textContent = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    if (passVal !== confirmVal) {
+      signupConfirmErr.textContent = 'Passwords do not match';
+      isValid = false;
+    }
+
+    if (!termsCheck.checked) {
+      showToast('Please accept the Terms of Service', true);
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    const signupBtn = document.getElementById('signupBtn');
+    showLoading(signupBtn, true);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, emailVal, passVal);
+      const user = userCredential.user;
+      
+      const referralCodeValue = referralCode.value.trim();
+      const userReferralCode = nameVal.substring(0, 3).toUpperCase() + Math.random().toString(36).substring(2, 7).toUpperCase();
+      
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        fullName: nameVal,
+        email: emailVal,
+        phone: phoneVal || '',
+        referralCode: userReferralCode,
+        referredBy: referralCodeValue || null,
+        totalBalance: 0,
+        totalInvested: 0,
+        totalReturns: 0,
+        activePlan: "None",
+        referrals: 0,
+        referralBonus: 0,
+        createdAt: new Date(),
+        lastLogin: new Date()
+      });
+      
+      showLoading(signupBtn, false);
+      showToast('Account created successfully! Redirecting to dashboard...');
+      
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 2000);
+      
+    } catch (error) {
+      showLoading(signupBtn, false);
+      let errorMsg = error.message;
+      if (error.code === 'auth/email-already-in-use') {
+        errorMsg = 'Email already registered. Please sign in instead.';
+        signupEmailErr.textContent = errorMsg;
+      } else if (error.code === 'auth/weak-password') {
+        errorMsg = 'Password should be at least 6 characters';
+      }
+      showToast(errorMsg, true);
+    }
+  }
+
+  // LOGIN logic with Firebase
+  async function handleLogin() {
+    clearErrors();
+    let valid = true;
+    const email = loginEmail.value.trim();
+    const pass = loginPassword.value;
+
+    if (!email) {
+      loginEmailErr.textContent = 'Email is required';
+      valid = false;
+    } else if (!isValidEmail(email)) {
+      loginEmailErr.textContent = 'Enter a valid email address';
+      valid = false;
+    }
+
+    if (!pass) {
+      loginPasswordErr.textContent = 'Password is required';
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    const loginBtn = document.getElementById('loginBtn');
+    showLoading(loginBtn, true);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+      const user = userCredential.user;
+      
+      showLoading(loginBtn, false);
+      showToast('Login successful! Redirecting to dashboard...');
+      
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1500);
+      
+    } catch (error) {
+      showLoading(loginBtn, false);
+      let errorMsg = error.message;
+      if (error.code === 'auth/user-not-found') {
+        errorMsg = 'No account found with this email';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMsg = 'Incorrect password';
+      } else if (error.code === 'auth/invalid-credential') {
+        errorMsg = 'Invalid email or password';
+      }
+      loginPasswordErr.textContent = errorMsg;
+      showToast(errorMsg, true);
+    }
+  }
+
+  // Forgot password
+  async function handleForgotPassword() {
+    const email = loginEmail.value.trim();
+    if (!email) {
+      showToast('Please enter your email address first', true);
+      loginEmail.focus();
+      return;
+    }
+    if (!isValidEmail(email)) {
+      showToast('Please enter a valid email address', true);
+      return;
+    }
+    
+    showToast('Sending reset email...');
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showToast('Password reset email sent! Check your inbox.');
+    } catch (error) {
+      showToast(error.message, true);
+    }
+  }
+
+  // Event listeners
+  document.getElementById('signupBtn').addEventListener('click', handleSignup);
+  document.getElementById('loginBtn').addEventListener('click', handleLogin);
+  document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    handleForgotPassword();
+  });
+
+  // Social login placeholders
+  document.querySelectorAll('.social-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+      showToast('Social login coming soon! Use email for now.');
+    });
+  });
+
+  // Confirm password validation
+  if (signupConfirm) {
+    signupConfirm.addEventListener('input', () => {
+      if (signupConfirm.value !== signupPassword.value) {
+        signupConfirmErr.textContent = 'Passwords do not match';
+      } else {
+        signupConfirmErr.textContent = '';
+      }
+    });
+  }
+</script>
+</body>
+</html>            font-size: 0.85rem;
         }
         .error-message { background: #fee2e2; color: #dc2626; }
         .success-message { background: #dcfce7; color: #16a34a; }
