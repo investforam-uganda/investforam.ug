@@ -18,9 +18,10 @@
       background: linear-gradient(145deg, #0B1120 0%, #111827 100%);
       min-height: 100vh;
       color: #f1f5f9;
+      overflow-x: hidden;
     }
 
-    /* Animated background */
+    /* Animated Background Orbs */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -31,12 +32,13 @@
     }
     .orb-1 { width: 40vw; height: 40vw; background: #10b981; top: -10%; left: -10%; animation: float 18s infinite alternate; }
     .orb-2 { width: 35vw; height: 35vw; background: #059669; bottom: -15%; right: -5%; animation: float 22s infinite alternate-reverse; }
+    .orb-3 { width: 25vw; height: 25vw; background: #34d399; top: 50%; left: 50%; animation: float 25s infinite alternate; }
     @keyframes float {
       0% { transform: translate(0, 0) scale(1); }
       100% { transform: translate(30px, 40px) scale(1.1); }
     }
 
-    /* Navbar */
+    /* Navbar - Simplified (no extra links) */
     .navbar {
       position: fixed;
       top: 0;
@@ -53,8 +55,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
     }
     .logo {
       font-size: 1.5rem;
@@ -65,28 +65,27 @@
       color: transparent;
       text-decoration: none;
     }
-    .nav-links {
+    .user-info {
       display: flex;
-      gap: 1.5rem;
       align-items: center;
-      flex-wrap: wrap;
+      gap: 1rem;
     }
-    .nav-links a {
-      text-decoration: none;
-      color: #94a3b8;
+    .user-name {
       font-weight: 500;
-      transition: color 0.2s;
+      color: #f1f5f9;
     }
-    .nav-links a:hover, .nav-links a.active {
-      color: #10b981;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #10b981;
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
       padding: 0.4rem 1rem;
       border-radius: 40px;
-      color: #10b981;
+      color: #ef4444;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover {
+      background: #ef4444;
+      color: white;
     }
 
     /* Main Content */
@@ -96,6 +95,22 @@
       padding: 6rem 2rem 2rem;
       position: relative;
       z-index: 10;
+    }
+
+    /* Welcome Section */
+    .welcome-section {
+      margin-bottom: 2rem;
+    }
+    .welcome-section h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #fff, #10b981);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .welcome-section p {
+      color: #94a3b8;
+      margin-top: 0.3rem;
     }
 
     /* Stats Grid */
@@ -111,9 +126,12 @@
       border-radius: 1.5rem;
       padding: 1.2rem;
       border: 1px solid rgba(255,255,255,0.05);
-      transition: transform 0.2s;
+      transition: transform 0.2s, border-color 0.2s;
     }
-    .stat-card:hover { transform: translateY(-5px); border-color: rgba(16,185,129,0.3); }
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(16,185,129,0.3);
+    }
     .stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
     .stat-value { font-size: 1.5rem; font-weight: 700; color: #10b981; }
     .stat-label { font-size: 0.8rem; color: #94a3b8; }
@@ -141,25 +159,421 @@
     }
     .btn-deposit, .btn-withdraw, .btn-invest {
       flex: 1;
-      padding: 0.8rem;
+      padding: 0.9rem;
       border: none;
       border-radius: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
+      font-size: 1rem;
     }
     .btn-deposit { background: #10b981; color: white; }
-    .btn-deposit:hover { background: #059669; transform: translateY(-2px); }
+    .btn-deposit:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(16,185,129,0.3); }
     .btn-withdraw { background: #ef4444; color: white; }
-    .btn-withdraw:hover { background: #dc2626; transform: translateY(-2px); }
+    .btn-withdraw:hover { background: #dc2626; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(239,68,68,0.3); }
     .btn-invest { background: #f59e0b; color: white; }
-    .btn-invest:hover { background: #d97706; transform: translateY(-2px); }
+    .btn-invest:hover { background: #d97706; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(245,158,11,0.3); }
 
     /* Referral Box */
     .referral-box {
       background: rgba(16,185,129,0.1);
       border-radius: 1rem;
       padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .referral-code {
+      font-family: monospace;
+      font-size: 1.2rem;
+      background: #1e293b;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      letter-spacing: 1px;
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid #10b981;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      color: #10b981;
+      cursor: pointer;
+    }
+
+    /* Transaction List */
+    .transaction-item {
+      background: rgba(15, 23, 42, 0.5);
+      padding: 0.8rem;
+      border-radius: 1rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 3px solid #10b981;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      width: 90%;
+      max-width: 450px;
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: modalSlide 0.3s ease;
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .modal-header h2 { font-size: 1.3rem; color: #10b981; }
+    .close-modal {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #94a3b8;
+    }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1rem;
+      color: white;
+      font-size: 1rem;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+    .info-box {
+      background: rgba(16,185,129,0.1);
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid #10b981;
+    }
+    .plan-option {
+      background: rgba(15,23,42,0.5);
+      padding: 0.8rem;
+      border-radius: 1rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+    .plan-option.selected {
+      border-color: #10b981;
+      background: rgba(16,185,129,0.2);
+    }
+    .plan-option:hover { background: rgba(16,185,129,0.1); }
+    .investment-summary {
+      background: rgba(15,23,42,0.5);
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 0.9rem;
+      background: #10b981;
+      border: none;
+      border-radius: 1rem;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: #059669; transform: translateY(-2px); }
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .success-message { background: rgba(16,185,129,0.2); color: #10b981; padding: 0.8rem; border-radius: 1rem; margin-top: 1rem; text-align: center; }
+    .error-message { background: rgba(239,68,68,0.2); color: #ef4444; padding: 0.8rem; border-radius: 1rem; margin-top: 1rem; text-align: center; }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .main-content { padding: 5rem 1rem 1rem; }
+      .button-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">⚡ FORAM INVEST</a>
+    <div class="user-info">
+      <span class="user-name" id="userName">Loading...</span>
+      <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="main-content">
+  <div class="welcome-section">
+    <h1 id="welcomeMsg">Welcome back!</h1>
+    <p>Manage your investments and track your portfolio</p>
+  </div>
+
+  <div class="stats-grid" id="statsGrid"></div>
+
+  <div class="card">
+    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+    <div class="button-group">
+      <button class="btn-deposit" id="depositBtn"><i class="fas fa-plus-circle"></i> Deposit</button>
+      <button class="btn-withdraw" id="withdrawBtn"><i class="fas fa-minus-circle"></i> Withdraw</button>
+      <button class="btn-invest" id="investBtn"><i class="fas fa-chart-line"></i> Invest Now</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-gift"></i> Refer & Earn</h3>
+    <p style="margin-bottom: 1rem;">Share your code and earn UGX 5,000 per referral!</p>
+    <div class="referral-box">
+      <span class="referral-code" id="referralCode">LOADING...</span>
+      <button class="copy-btn" id="copyCodeBtn"><i class="fas fa-copy"></i> Copy Code</button>
+    </div>
+    <div style="display: flex; gap: 2rem; margin-top: 1rem;">
+      <span><i class="fas fa-users"></i> Referrals: <strong id="referralCount">0</strong></span>
+      <span><i class="fas fa-coins"></i> Bonus: <strong id="referralBonus">UGX 0</strong></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><i class="fas fa-history"></i> Transaction History</h3>
+    <div id="transactionHistory" style="max-height: 350px; overflow-y: auto;"></div>
+  </div>
+</div>
+
+<!-- Deposit Modal -->
+<div id="depositModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-plus-circle"></i> Make a Deposit</h2>
+      <span class="close-modal" id="closeDepositModal">&times;</span>
+    </div>
+    <div class="info-box">
+      <p><i class="fas fa-info-circle"></i> Minimum deposit: <strong>UGX 300,000</strong></p>
+      <p><i class="fas fa-phone"></i> Send money to: <strong>+256 740 327 473</strong></p>
+    </div>
+    <form id="depositForm">
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select id="paymentMethod" required>
+          <option value="MTN Mobile Money">MTN Mobile Money</option>
+          <option value="Airtel Money">Airtel Money</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Your Phone Number</label>
+        <input type="tel" id="phoneNumber" placeholder="0771234567" required>
+      </div>
+      <div class="form-group">
+        <label>Amount (UGX)</label>
+        <input type="number" id="depositAmount" min="300000" step="10000" placeholder="300,000" required>
+      </div>
+      <div class="form-group">
+        <label>Transaction Reference</label>
+        <input type="text" id="transactionRef" placeholder="Enter transaction ID" required>
+      </div>
+      <button type="submit" class="btn-primary" id="depositSubmitBtn">Confirm Deposit</button>
+      <div id="depositMsg"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Withdraw Modal -->
+<div id="withdrawModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-minus-circle"></i> Request Withdrawal</h2>
+      <span class="close-modal" id="closeWithdrawModal">&times;</span>
+    </div>
+    <div class="info-box">
+      <p><i class="fas fa-info-circle"></i> Minimum withdrawal: <strong>UGX 100,000</strong></p>
+      <p><i class="fas fa-clock"></i> Processing time: <strong>24-48 hours</strong></p>
+    </div>
+    <form id="withdrawForm">
+      <div class="form-group">
+        <label>Withdrawal Method</label>
+        <select id="withdrawMethod" required>
+          <option value="MTN Mobile Money">MTN Mobile Money</option>
+          <option value="Airtel Money">Airtel Money</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Phone / Account Number</label>
+        <input type="text" id="withdrawPhone" placeholder="0771234567" required>
+      </div>
+      <div class="form-group">
+        <label>Amount (UGX)</label>
+        <input type="number" id="withdrawAmount" min="100000" step="10000" placeholder="100,000" required>
+      </div>
+      <div id="balanceDisplay" class="info-box" style="margin-bottom: 1rem;"></div>
+      <button type="submit" class="btn-primary">Request Withdrawal</button>
+      <div id="withdrawMsg"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Investment Modal -->
+<div id="investModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-chart-line"></i> Make an Investment</h2>
+      <span class="close-modal" id="closeInvestModal">&times;</span>
+    </div>
+    <div class="info-box">
+      <p><i class="fas fa-chart-simple"></i> Choose a plan that fits your goals</p>
+    </div>
+    <form id="investForm">
+      <div class="form-group">
+        <label>Select Plan</label>
+        <div id="planOptions">
+          <div class="plan-option" data-plan="Basic Plan" data-rate="8" data-min="300000" data-days="30">
+            <strong>📈 Basic Plan</strong> - 8% monthly return<br>
+            <small>Min: UGX 300,000 | Duration: 30 days</small>
+          </div>
+          <div class="plan-option" data-plan="Growth Plan" data-rate="12" data-min="1000000" data-days="30">
+            <strong>🚀 Growth Plan</strong> - 12% monthly return<br>
+            <small>Min: UGX 1,000,000 | Duration: 30 days</small>
+          </div>
+          <div class="plan-option" data-plan="Premium Plan" data-rate="25" data-min="3000000" data-days="90">
+            <strong>👑 Premium Plan</strong> - 25% quarterly return<br>
+            <small>Min: UGX 3,000,000 | Duration: 90 days</small>
+          </div>
+          <div class="plan-option" data-plan="VIP Plan" data-rate="50" data-min="10000000" data-days="365">
+            <strong>💎 VIP Plan</strong> - 50% annual return<br>
+            <small>Min: UGX 10,000,000 | Duration: 365 days</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Investment Amount (UGX)</label>
+        <input type="number" id="investAmount" placeholder="Enter amount" required>
+      </div>
+      <div id="investmentSummary" class="investment-summary"></div>
+      <button type="submit" class="btn-primary">Confirm Investment</button>
+      <div id="investMsg"></div>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, orderBy, getDocs, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCX-ag3dli4j1DyP4nJKiO58yOEyQy-_5c",
+    authDomain: "invest-foram-platform.firebaseapp.com",
+    projectId: "invest-foram-platform",
+    storageBucket: "invest-foram-platform.firebasestorage.app",
+    messagingSenderId: "284475751069",
+    appId: "1:284475751069:web:008f29e8696f483c19b274"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let currentUser = null;
+  let currentBalance = 0;
+  let selectedPlan = null;
+
+  function formatCurrency(amount) {
+    return `UGX ${(amount || 0).toLocaleString()}`;
+  }
+
+  function showMessage(elementId, message, isError = false) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.innerHTML = `<div class="${isError ? 'error-message' : 'success-message'}">${message}</div>`;
+      setTimeout(() => element.innerHTML = '', 3000);
+    }
+  }
+
+  async function loadDashboard(user) {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      currentBalance = data.totalBalance || 0;
+      
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">${formatCurrency(currentBalance)}</div><div class="stat-label">Total Balance</div></div>
+        <div class="stat-card"><div class="stat-icon">📈</div><div class="stat-value">${formatCurrency(data.totalReturns || 0)}</div><div class="stat-label">Total Returns</div></div>
+        <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-value">${formatCurrency(data.totalInvested || 0)}</div><div class="stat-label">Total Invested</div></div>
+        <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value">${data.activePlan || 'None'}</div><div class="stat-label">Active Plan</div></div>
+      `;
+      
+      document.getElementById('welcomeMsg').innerHTML = `Welcome back, ${data.fullName?.split(' ')[0] || 'Investor'}!`;
+      document.getElementById('userName').innerHTML = `${data.fullName?.split(' ')[0] || 'User'}`;
+      document.getElementById('referralCode').innerHTML = data.referralCode || 'N/A';
+      document.getElementById('referralCount').innerHTML = data.referrals || 0;
+      document.getElementById('referralBonus').innerHTML = formatCurrency(data.referralBonus || 0);
+      
+      await loadTransactions(user.uid);
+    }
+  }
+
+  async function loadTransactions(userId) {
+    const transRef = collection(db, "users", userId, "transactions");
+    const q = query(transRef, orderBy("date", "desc"));
+    const transSnap = await getDocs(q);
+    const historyDiv = document.getElementById('transactionHistory');
+    if (transSnap.empty) {
+      historyDiv.innerHTML = '<p style="text-align:center; padding:2rem; color:#94a3b8;">No transactions yet</p>';
+    } else {
+      let html = '';
+      transSnap.forEach(doc => {
+        const t = doc.data();
+        const date = t.date?.toDate() || new Date();
+        const icon = t.type === 'deposit' ? '💰' : t.type === 'investment' ? '📈' : '💸';
+        const  padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
