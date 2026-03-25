@@ -1,634 +1,774 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Foram Invest - Smart Investment Platform</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Foram Invest | Smart Investment Platform</title>
+  <!-- Google Fonts + smooth reset -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
-            line-height: 1.5;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fafcff;
+      color: #111827;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
 
-        /* Navigation - Responsive */
-        .navbar {
-            background: white;
-            padding: 0.8rem 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+    /* custom cursor (subtle but fun) */
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+      transform: translate(-50%, -50%);
+      opacity: 0.7;
+    }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
+    .cursor-ring {
+      width: 32px;
+      height: 32px;
+      border: 2px solid rgba(16,185,129,0.4);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.15s ease, width 0.2s, height 0.2s;
+      transform: translate(-50%, -50%);
+      backdrop-filter: blur(2px);
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-size: 1.3rem;
-            font-weight: 800;
-        }
+    /* global transitions */
+    a, button {
+      transition: all 0.25s ease;
+    }
 
-        .logo-icon {
-            font-size: 1.5rem;
-        }
+    /* nav animation on scroll */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      z-index: 100;
+      transition: all 0.3s;
+    }
 
-        .logo-text {
-            background: linear-gradient(135deg, #1e3c4a, #2c5f8a);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #10b981, #059669);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
 
-        .nav-link {
-            text-decoration: none;
-            color: #4a5568;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid #2c5f8a;
-            padding: 0.4rem 1rem;
-            border-radius: 30px;
-            color: #2c5f8a;
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.85rem;
-        }
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #1f2937;
+      font-size: 0.95rem;
+    }
 
-        .btn-primary {
-            background: #1f3b4c;
-            border: none;
-            padding: 0.4rem 1rem;
-            border-radius: 30px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.85rem;
-        }
+    .nav-links a:hover {
+      color: #10b981;
+      transform: translateY(-2px);
+    }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #1e3c4a 0%, #2c5f8a 100%);
-            color: white;
-            padding: 3rem 1rem;
-            text-align: center;
-        }
+    .btn-outline-light {
+      background: transparent;
+      border: 1.5px solid #e2e8f0;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      color: #1f2937;
+    }
 
-        .hero h1 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
+    .btn-outline-light:hover {
+      border-color: #10b981;
+      background: rgba(16,185,129,0.05);
+      color: #10b981;
+    }
 
-        .hero p {
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    .btn-primary-nav {
+      background: #10b981;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      color: white;
+    }
 
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+    .btn-primary-nav:hover {
+      background: #059669;
+      transform: translateY(-2px);
+    }
 
-        /* Stats Section */
-        .stats {
-            padding: 2rem 1rem;
-            background: white;
-        }
+    /* HERO SECTION */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 2rem 5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+    }
 
-        .stats-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            text-align: center;
-        }
+    .hero-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
 
-        .stat-item h3 {
-            font-size: 1.5rem;
-            color: #2c5f8a;
-        }
+    .hero-content {
+      flex: 1;
+      min-width: 280px;
+    }
 
-        .stat-item p {
-            font-size: 0.8rem;
-            color: #64748b;
-        }
+    .hero-badge {
+      background: #dcfce7;
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #10b981;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.3px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s forwards 0.1s;
+    }
 
-        /* Plans Section */
-        .plans {
-            padding: 2rem 1rem;
-            background: #f8fafc;
-        }
+    .hero-content h1 {
+      font-size: 3.4rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #0f172a, #1e293b);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(25px);
+      animation: fadeUp 0.7s forwards 0.2s;
+    }
 
-        .section-title {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #4b5563;
+      max-width: 550px;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(25px);
+      animation: fadeUp 0.7s forwards 0.3s;
+    }
 
-        .section-subtitle {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-        }
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(25px);
+      animation: fadeUp 0.7s forwards 0.4s;
+    }
 
-        .plan-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
+    .btn-primary {
+      background: #10b981;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(16,185,129,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
 
-        .plan-card {
-            background: white;
-            border-radius: 16px;
-            padding: 1.2rem;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-        }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      background: #059669;
+      box-shadow: 0 15px 25px -8px rgba(16,185,129,0.4);
+    }
 
-        .plan-card.popular {
-            border: 2px solid #ffd700;
-            transform: scale(1.02);
-        }
+    .btn-secondary {
+      background: transparent;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      color: #1f2937;
+    }
 
-        .plan-badge {
-            display: inline-block;
-            padding: 0.2rem 0.8rem;
-            background: #e2e8f0;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-        }
+    .btn-secondary:hover {
+      border-color: #10b981;
+      background: #f8fafc;
+      transform: translateY(-3px);
+      color: #10b981;
+    }
 
-        .plan-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
+    /* animated investment card */
+    .hero-visual {
+      flex: 1;
+      min-width: 280px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
 
-        .plan-price {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #2c5f8a;
-            margin-bottom: 1rem;
-        }
+    .floating-card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 2rem;
+      padding: 1.2rem 1.8rem;
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.5);
+      width: 300px;
+      transform: rotate(2deg);
+      animation: float 4s ease-in-out infinite;
+    }
 
-        .plan-features {
-            list-style: none;
-            margin-bottom: 1rem;
-        }
+    .floating-card-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-        .plan-features li {
-            margin-bottom: 0.4rem;
-            font-size: 0.85rem;
-            color: #4a5568;
-        }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+    }
 
-        .invest-btn {
-            background: #1f3b4c;
-            color: white;
-            border: none;
-            padding: 0.6rem;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-        }
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+    }
 
-        /* Features */
-        .features {
-            padding: 2rem 1rem;
-            background: white;
-        }
+    .progress-fill {
+      width: 78%;
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      border-radius: 20px;
+      animation: fillWidth 1.2s ease-out;
+    }
 
-        .features-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
+    .badge-icon {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 0.5rem 1rem;
+      border-radius: 60px;
+      width: fit-content;
+    }
 
-        .feature-card {
-            text-align: center;
-            padding: 1rem;
-        }
+    .roi-positive {
+      color: #10b981;
+      font-weight: 700;
+    }
 
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(1deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(1deg); }
+    }
 
-        .feature-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-        }
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .feature-card p {
-            font-size: 0.8rem;
-            color: #64748b;
-        }
+    @keyframes fillWidth {
+      from { width: 0%; }
+      to { width: 78%; }
+    }
 
-        /* Footer */
-        .footer {
-            background: #0f172a;
-            color: #94a3b8;
-            padding: 2rem 1rem;
-            text-align: center;
-            font-size: 0.8rem;
-        }
+    /* Features Section */
+    .features {
+      padding: 6rem 2rem;
+      background: #ffffff;
+      text-align: center;
+    }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
+    .section-title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
 
-        .modal.active {
-            display: flex;
-        }
+    .section-desc {
+      color: #4b5563;
+      max-width: 600px;
+      margin: 0 auto 3rem auto;
+    }
 
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 1.5rem;
-            width: 90%;
-            max-width: 400px;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
+    .features-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        .form-group {
-            margin-bottom: 1rem;
-        }
+    .feature-card {
+      background: white;
+      padding: 2rem 1.5rem;
+      border-radius: 2rem;
+      width: 280px;
+      box-shadow: 0 10px 30px -12px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+      border: 1px solid #f0f2f5;
+      opacity: 0;
+      transform: translateY(30px);
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.3rem;
-            font-weight: 500;
-            font-size: 0.85rem;
-        }
+    .feature-card.animate-in {
+      animation: fadeUp 0.6s forwards;
+    }
 
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 0.6rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
+    .feature-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 25px 35px -15px rgba(0,0,0,0.1);
+      border-color: #d9e2ef;
+    }
 
-        .user-name {
-            font-weight: 600;
-            color: #2c5f8a;
-        }
+    .icon-circle {
+      background: #dcfce7;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+      margin: 0 auto 1.2rem;
+      font-size: 1.8rem;
+    }
 
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
+    /* Investment Plans Preview */
+    .plans-preview {
+      padding: 4rem 2rem;
+      background: #f8fafc;
+    }
 
-        .loading-overlay.active {
-            display: flex;
-        }
+    .plans-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 2rem auto 0;
+    }
 
-        .loader {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-        }
+    .plan-card-preview {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      width: 260px;
+      text-align: center;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+    .plan-card-preview:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
 
-        @media (min-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .plan-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .features-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-        }
+    .plan-rate {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #10b981;
+    }
 
-        /* Invisible Admin Dots */
-        .admin-dots {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            cursor: pointer;
-            padding: 8px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 999;
-        }
-        .admin-dots:hover {
-            opacity: 0.3;
-        }
-        .dot {
-            width: 6px;
-            height: 6px;
-            background: #1e293b;
-            border-radius: 50%;
-            margin: 2px 0;
-        }
-    </style>
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+      margin: 2rem 2rem 4rem;
+      border-radius: 3rem;
+      padding: 4rem 2rem;
+      text-align: center;
+      color: white;
+      opacity: 0;
+      transform: scale(0.96);
+      transition: all 0.6s;
+    }
+
+    .cta-section.reveal {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta-button {
+      background: white;
+      color: #065f46;
+      padding: 0.9rem 2.2rem;
+      border-radius: 60px;
+      font-weight: 700;
+      border: none;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+      background: #f0fdf4;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #6c757d;
+      border-top: 1px solid #edf2f7;
+    }
+
+    /* scroll animations */
+    .fade-on-scroll {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.4rem;
+      }
+      .nav-links {
+        gap: 1rem;
+      }
+      .hero-grid {
+        flex-direction: column;
+        text-align: center;
+      }
+      .hero-buttons {
+        justify-content: center;
+      }
+      .hero-content p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .nav-container {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <span class="logo-icon">⚡</span>
-                <span class="logo-text">FORAM INVEST</span>
-            </div>
-            <div class="nav-links">
-               <div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="support.html">Support</a>
-    <a href="login.html" class="btn-outline">Sign In</a>
-    <a href="signup.html" class="btn-primary">Create Account</a>
-</div>
-                <div id="userMenu" style="display: none;">
-                    <span id="userName" class="user-name"></span>
-                    <button id="logoutBtn" class="btn-outline" style="margin-left: 0.5rem;">Logout</button>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Grow your wealth with <span style="color: #ffd700;">With number one investment platform</span></h1>
-            <p>Foram Invest offers flexible investment plans, daily returns ,withdraws anytime, and complete transparency.</p>
-            <div class="hero-buttons">
-                <a href="signup.html" class="btn-primary">Get Started</a>
-                <a href="#plans" class="btn-outline">View Plans</a>
-            </div>
-        </div>
-    </section>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
 
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <h3 id="totalInvestedStat">UGX 500M+</h3>
-                <p>Total Invested</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="activeInvestorsStat">15,000+</h3>
-                <p>Active Investors</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="supportHoursStat">24/7</h3>
-                <p>Customer Support</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="satisfactionRate">98%</h3>
-                <p>Satisfaction Rate</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="plans" class="plans">
-        <div class="container">
-            <h2 class="section-title">🔥 Investment Plans</h2>
-            <p class="section-subtitle">Choose the plan that fits your financial goals</p>
-            <div class="plan-grid">
-                <div class="plan-card">
-                    <div class="plan-badge">STARTER</div>
-                    <h3>Basic Plan</h3>
-                    <div class="plan-price">UGX 10,000 – 99,999</div>
-                    <ul class="plan-features">
-                        <li>✨ 5% monthly return</li>
-                        <li>🔒 Capital protection</li>
-                        <li>💰 Instant withdrawal</li>
-                    </ul>
-                    <button class="invest-btn" data-plan="Basic Plan" data-min="300000">Invest Now</button>
-                </div>
-                <div class="plan-card popular">
-                    <div class="plan-badge">🔥 POPULAR</div>
-                    <h3>Growth Plan</h3>
-                    <div class="plan-price">UGX 100,000 – 199,999</div>
-                    <ul class="plan-features">
-                        <li>✨ 12% monthly return</li>
-                        <li>🎁 Bonus 5% on reinvest</li>
-                        <li>💎 Priority support</li>
-                    </ul>
-                    <button class="invest-btn" data-plan="Growth Plan" data-min="1000000">Invest Now</button>
-                </div>
-                <div class="plan-card">
-                    <div class="plan-badge">👑 VIP</div>
-                    <h3>Premium Plan</h3>
-                    <div class="plan-price">UGX 200,000+</div>
-                    <ul class="plan-features">
-                        <li>✨ 25% upto 50% monthly return</li>
-                        <li>💡 Personal advisor</li>
-                        <li>🚀 Early access</li>
-                    </ul>
-                    <button class="invest-btn" data-plan="Premium Plan" data-min="5000000">Invest Now</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="features">
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🔒</div>
-                <h3>Secure Platform</h3>
-                <p>Bank-level security</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">💰</div>
-                <h3>Daily Returns and withdraw</h3>
-                <p>Profits credited daily and instant withdraws with no
-                    limit
-                </p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🤝</div>
-                <h3>Referral Bonus</h3>
-                <p>Earn up to 5% commission</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⏱️</div>
-                <h3>24/7 Support</h3>
-                <p>Dedicated support team</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <p>© 2025 Foram Invest — Secure investment platform. Your capital is at risk.</p>
-    </footer>
-
-    <!-- Invisible Admin Dots -->
-    <div class="admin-dots" id="adminDots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">⚡ FORAM INVEST</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="support.html">Support</a>
+      <a href="login.html" class="btn-outline-light">Sign In</a>
+      <a href="signup.html" class="btn-primary-nav">Create Account</a>
     </div>
+  </div>
+</nav>
 
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loader"></div>
+<main>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">📈 Start investing today</div>
+        <h1>Grow your wealth with<br>smart investments.</h1>
+        <p>Earn up to 50% annual returns with our carefully curated investment plans. Start with as low as UGX 300,000.</p>
+        <div class="hero-buttons">
+          <a href="signup.html" class="btn-primary">Get started →</a>
+          <a href="#plans" class="btn-secondary">View plans</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="floating-card">
+          <div class="floating-card-inner">
+            <div class="badge-icon">
+              <span>📊</span> <span>Portfolio Performance</span>
+            </div>
+            <div class="stat-row">
+              <span>Your Returns</span>
+              <span class="roi-positive">+24.5%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <div class="stat-row">
+              <span>Active Investors</span>
+              <span>15,234+</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 92%;"></div></div>
+            <div style="font-size: 0.75rem; color:#10b981;">⚡ Trusted by thousands</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  <!-- Features -->
+  <section class="features" id="features">
+    <h2 class="section-title fade-on-scroll">Why invest with Foram</h2>
+    <p class="section-desc fade-on-scroll">Secure platform, daily returns, and complete transparency — everything you need to grow your wealth.</p>
+    <div class="features-grid">
+      <div class="feature-card" data-delay="0">
+        <div class="icon-circle">🔒</div>
+        <h3>Secure Platform</h3>
+        <p>Bank-level encryption & 2FA protection for your investments.</p>
+      </div>
+      <div class="feature-card" data-delay="0.1">
+        <div class="icon-circle">📈</div>
+        <h3>Daily Returns</h3>
+        <p>Get profits credited to your account every single day.</p>
+      </div>
+      <div class="feature-card" data-delay="0.2">
+        <div class="icon-circle">🤝</div>
+        <h3>Referral Bonus</h3>
+        <p>Earn UGX 5,000 for every friend you refer.</p>
+      </div>
+      <div class="feature-card" data-delay="0.3">
+        <div class="icon-circle">⏱️</div>
+        <h3>24/7 Support</h3>
+        <p>Dedicated support team available around the clock.</p>
+      </div>
+    </div>
+  </section>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCX-ag3dli4j1DyP4nJKiO58yOEyQy-_5c",
-            authDomain: "invest-foram-platform.firebaseapp.com",
-            projectId: "invest-foram-platform",
-            storageBucket: "invest-foram-platform.firebasestorage.app",
-            messagingSenderId: "284475751069",
-            appId: "1:284475751069:web:008f29e8696f483c19b274"
-        };
+  <!-- Investment Plans Preview -->
+  <section id="plans" class="plans-preview">
+    <h2 class="section-title fade-on-scroll">🔥 Investment Plans</h2>
+    <p class="section-desc fade-on-scroll">Choose the plan that fits your financial goals</p>
+    <div class="plans-grid">
+      <div class="plan-card-preview fade-on-scroll">
+        <div class="icon-circle" style="background: #fef3c7;">⭐</div>
+        <h3>Basic Plan</h3>
+        <div class="plan-rate">8%</div>
+        <p>Monthly return</p>
+        <p style="font-size: 0.8rem; color: #64748b;">Min: UGX 300,000</p>
+        <a href="signup.html" class="btn-primary" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.85rem;">Invest Now</a>
+      </div>
+      <div class="plan-card-preview fade-on-scroll">
+        <div class="icon-circle" style="background: #dcfce7;">🚀</div>
+        <h3>Growth Plan</h3>
+        <div class="plan-rate">12%</div>
+        <p>Monthly return</p>
+        <p style="font-size: 0.8rem; color: #64748b;">Min: UGX 1,000,000</p>
+        <a href="signup.html" class="btn-primary" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.85rem;">Invest Now</a>
+      </div>
+      <div class="plan-card-preview fade-on-scroll">
+        <div class="icon-circle" style="background: #fee2e2;">👑</div>
+        <h3>Premium Plan</h3>
+        <div class="plan-rate">25%</div>
+        <p>Quarterly return</p>
+        <p style="font-size: 0.8rem; color: #64748b;">Min: UGX 3,000,000</p>
+        <a href="signup.html" class="btn-primary" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.85rem;">Invest Now</a>
+      </div>
+      <div class="plan-card-preview fade-on-scroll">
+        <div class="icon-circle" style="background: #e0e7ff;">💎</div>
+        <h3>VIP Plan</h3>
+        <div class="plan-rate">50%</div>
+        <p>Annual return</p>
+        <p style="font-size: 0.8rem; color: #64748b;">Min: UGX 10,000,000</p>
+        <a href="signup.html" class="btn-primary" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.85rem;">Invest Now</a>
+      </div>
+    </div>
+  </section>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+  <!-- Stats Section -->
+  <div style="max-width: 1100px; margin: 0 auto; padding: 2rem;">
+    <div class="fade-on-scroll" style="background: #f8fafc; border-radius: 2rem; padding: 2rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+      <div><span style="font-size: 2rem; font-weight: 800;">15,000+</span><br>Active Investors</div>
+      <div><span style="font-size: 2rem; font-weight: 800;">UGX 50B+</span><br>Total Invested</div>
+      <div><span style="font-size: 2rem; font-weight: 800;">98%</span><br>Satisfaction Rate</div>
+      <a href="signup.html" class="btn-primary" style="background: #1f2937;">Start Investing →</a>
+    </div>
+  </div>
 
-        // Load homepage stats
-        async function loadHomepageStats() {
-            try {
-                const docRef = doc(db, "settings", "homepage");
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('totalInvestedStat').innerHTML = `UGX ${(data.totalInvested || 10000000).toLocaleString()}+`;
-                    document.getElementById('activeInvestorsStat').innerHTML = `${(data.activeInvestors || 15000).toLocaleString()}+`;
-                    document.getElementById('supportHoursStat').innerHTML = data.supportHours || '24/7';
-                    document.getElementById('satisfactionRate').innerHTML = `${data.satisfactionRate || 98}%`;
-                }
-            } catch(e) { console.log('Stats load error:', e); }
+  <!-- CTA Section -->
+  <div class="cta-section" id="ctaBlock">
+    <h2>Ready to start your investment journey?</h2>
+    <p style="opacity: 0.9; margin-top: 0.5rem;">Join 15,000+ investors already growing their wealth with Foram Invest.</p>
+    <a href="signup.html" class="cta-button">Create Free Account →</a>
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 Foram Invest — Secure investment platform. Your capital is at risk. Past performance does not guarantee future results.</p>
+</footer>
+
+<script>
+  // Cursor animation effect
+  const cursorDot = document.querySelector('.cursor-dot');
+  const cursorRing = document.querySelector('.cursor-ring');
+
+  if (cursorDot && cursorRing) {
+    document.addEventListener('mousemove', (e) => {
+      cursorDot.style.left = e.clientX + 'px';
+      cursorDot.style.top = e.clientY + 'px';
+      cursorRing.style.left = e.clientX + 'px';
+      cursorRing.style.top = e.clientY + 'px';
+    });
+    const interactiveEls = document.querySelectorAll('a, button, .feature-card, .plan-card-preview');
+    interactiveEls.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorRing.style.width = '48px';
+        cursorRing.style.height = '48px';
+        cursorRing.style.borderColor = '#10b981';
+        cursorRing.style.opacity = '0.6';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorRing.style.width = '32px';
+        cursorRing.style.height = '32px';
+        cursorRing.style.borderColor = 'rgba(16,185,129,0.4)';
+        cursorRing.style.opacity = '1';
+      });
+    });
+  }
+
+  // Navbar background change on scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      navbar.style.background = 'rgba(255,255,255,0.96)';
+      navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.02)';
+    } else {
+      navbar.style.background = 'rgba(255,255,255,0.85)';
+      navbar.style.boxShadow = 'none';
+    }
+  });
+
+  // Intersection Observer for fade-on-scroll elements
+  const fadeElements = document.querySelectorAll('.fade-on-scroll');
+  const featureCards = document.querySelectorAll('.feature-card');
+  const planCards = document.querySelectorAll('.plan-card-preview');
+  const ctaSection = document.querySelector('.cta-section');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target === ctaSection) {
+          entry.target.classList.add('reveal');
         }
-        loadHomepageStats();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2, rootMargin: "0px 0px -40px 0px" });
 
-        // Auth state
-        onAuthStateChanged(auth, async (user) => {
-            const authButtons = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const userNameSpan = document.getElementById('userName');
-            
-            if (user) {
-                authButtons.style.display = 'none';
-                userMenu.style.display = 'flex';
-                try {
-                    const userRef = doc(db, "users", user.uid);
-                    const userSnap = await getDoc(userRef);
-                    if (userSnap.exists()) {
-                        userNameSpan.textContent = `Welcome, ${userSnap.data().fullName?.split(' ')[0] || 'User'}`;
-                    } else {
-                        userNameSpan.textContent = `Welcome, ${user.email?.split('@')[0]}`;
-                    }
-                } catch(e) { userNameSpan.textContent = `Welcome, Investor`; }
-            } else {
-                authButtons.style.display = 'flex';
-                userMenu.style.display = 'none';
-            }
-        });
+  fadeElements.forEach(el => observer.observe(el));
+  if (ctaSection) observer.observe(ctaSection);
+  planCards.forEach(card => observer.observe(card));
 
-        // Logout
-        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
-            await signOut(auth);
-            window.location.href = 'index.html';
+  // feature cards individual animation with delay
+  const animateFeatureCards = () => {
+    featureCards.forEach((card, idx) => {
+      const delay = card.getAttribute('data-delay') || (idx * 0.08);
+      const observerCard = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.animation = `fadeUp 0.6s forwards ${delay}s`;
+            observerCard.unobserve(entry.target);
+          }
         });
+      }, { threshold: 0.3 });
+      observerCard.observe(card);
+    });
+  };
+  animateFeatureCards();
 
-        // Invest buttons
-        document.querySelectorAll('.invest-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (auth.currentUser) {
-                    window.location.href = 'dashboard.html';
-                } else {
-                    alert('Please login first to invest');
-                    window.location.href = 'login.html';
-                }
-            });
-        });
+  // Button click effects
+  const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, .cta-button, .btn-primary-nav');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (!btn.getAttribute('href')) e.preventDefault();
+      btn.style.transform = 'scale(0.98)';
+      setTimeout(() => { btn.style.transform = ''; }, 150);
+    });
+  });
 
-        // Admin access - triple click dots
-        let adminClickCount = 0;
-        let adminTimer;
-        const adminDots = document.getElementById('adminDots');
-        adminDots.addEventListener('click', () => {
-            adminClickCount++;
-            if (adminClickCount === 1) {
-                adminTimer = setTimeout(() => { adminClickCount = 0; }, 1000);
-            }
-            if (adminClickCount === 3) {
-                window.location.href = 'admin-login.html';
-                adminClickCount = 0;
-                clearTimeout(adminTimer);
-            }
-        });
-    </script>
+  // Floating glow effect
+  const heroVisual = document.querySelector('.hero-visual');
+  if(heroVisual){
+    setInterval(() => {
+      heroVisual.style.filter = 'drop-shadow(0 0 8px rgba(16,185,129,0.2))';
+      setTimeout(() => { heroVisual.style.filter = 'drop-shadow(0 0 2px rgba(0,0,0,0.05))'; }, 800);
+    }, 3000);
+  }
+
+  // Ensure progress bars animate
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.progress-fill').forEach(fill => {
+      fill.style.animation = 'fillWidth 1s ease-out';
+    });
+  });
+</script>
 </body>
 </html>
