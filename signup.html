@@ -712,4 +712,292 @@
       button.disabled = true;
       button.innerHTML = '<span class="loading-spinner"></span> Processing...';
     } else {
-      button
+      button.disabled = false;
+      if (button.id === 'loginBtn') {
+        button.innerHTML = '<i class="fas fa-arrow-right-to-bracket" style="margin-right: 8px;"></i> Sign In';
+      } else {
+        button.innerHTML = '<i class="fas fa-user-plus" style="margin-right: 8px;"></i> Create Account';
+      }
+    }
+  }
+
+  function clearErrors() {
+    const allErrors = document.querySelectorAll('.error-msg');
+    allErrors.forEach(err => err.textContent = '');
+  }
+
+  // Password strength checker
+  function checkPasswordStrength(password) {
+    let strength = 0;
+    if (password.length >= 6) strength++;
+    if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+    if (password.match(/\d/)) strength++;
+    if (password.match(/[^A-Za-z0-9]/)) strength++;
+    
+    const colors = ['#ef4444', '#f59e0b', '#fbbf24', '#10b981', '#059669'];
+    const texts = ['Very Weak', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+    
+    document.getElementById('strengthBar').style.width = `${(strength + 1) * 20}%`;
+    document.getElementById('strengthBar').style.backgroundColor = colors[strength];
+    document.getElementById('strengthText').textContent = `Password strength: ${texts[strength]}`;
+    document.getElementById('strengthText').style.color = colors[strength];
+    return strength;
+  }
+
+  if (signupPassword) {
+    signupPassword.addEventListener('input', (e) => checkPasswordStrength(e.target.value));
+  }
+
+  // Switch UI between login & signup
+  function setActiveForm(formType) {
+    clearErrors();
+    if (formType === 'login') {
+      loginBox.classList.remove('hidden');
+      signupBox.classList.add('hidden');
+      btnSignInTab.classList.add('active');
+      btnSignUpTab.classList.remove('active');
+    } else {
+      loginBox.classList.add('hidden');
+      signupBox.classList.remove('hidden');
+      btnSignUpTab.classList.add('active');
+      btnSignInTab.classList.remove('active');
+    }
+  }
+
+  btnSignInTab.addEventListener('click', () => setActiveForm('login'));
+  btnSignUpTab.addEventListener('click', () => setActiveForm('signup'));
+  if (switchToSignUp) switchToSignUp.addEventListener('click', () => setActiveForm('signup'));
+  if (switchToSignIn) switchToSignIn.addEventListener('click', () => setActiveForm('login'));
+
+  // Email validation
+  function isValidEmail(email) {
+    return /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
+  }
+
+  // SIGNUP logic with Firebase
+  async function handleSignup() {
+    clearErrors();
+    let isValid = true;
+    const nameVal = signupName.value.trim();
+    const emailVal = signupEmail.value.trim();
+    const phoneVal = signupPhone.value.trim();
+    const passVal = signupPassword.value;
+    const confirmVal = signupConfirm.value;
+
+    if (!nameVal) {
+      signupNameErr.textContent = 'Full name is required';
+      isValid = false;
+    } else if (nameVal.length < 2) {
+      signupNameErr.textContent = 'Name must be at least 2 characters';
+      isValid = false;
+    }
+
+    if (!emailVal) {
+      signupEmailErr.textContent = 'Email address is required';
+      isValid = false;
+    } else if (!isValidEmail(emailVal)) {
+      signupEmailErr.textContent = 'Enter a valid email address';
+      isValid = false;
+    }
+
+    if (!passVal) {
+      signupPasswordErr.textContent = 'Password is required';
+      isValid = false;
+    } else if (passVal.length < 6) {
+      signupPasswordErr.textContent = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    if (passVal !== confirmVal) {
+      signupConfirmErr.textContent = 'Passwords do not match';
+      isValid = false;
+    }
+
+    if (!termsCheck.checked) {
+      showToast('Please accept the Terms of Service', true);
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    const signupBtn = document.getElementById('signupBtn');
+    showLoading(signupBtn, true);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, emailVal, passVal);
+      const user = userCredential.user;
+      
+      const referralCodeValue = referralCode.value.trim();
+      const userReferralCode = nameVal.substring(0, 3).toUpperCase() + Math.random().toString(36).substring(2, 7).toUpperCase();
+      
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        fullName: nameVal,
+        email: emailVal,
+        phone: phoneVal || '',
+        referralCode: userReferralCode,
+        referredBy: referralCodeValue || null,
+        totalBalance: 0,
+        totalInvested: 0,
+        totalReturns: 0,
+        activePlan: "None",
+        referrals: 0,
+        referralBonus: 0,
+        createdAt: new Date(),
+        lastLogin: new Date()
+      });
+      
+      showLoading(signupBtn, false);
+      showToast('Account created successfully! Redirecting to dashboard...');
+      
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 2000);
+      
+    } catch (error) {
+      showLoading(signupBtn, false);
+      let errorMsg = error.message;
+      if (error.code === 'auth/email-already-in-use') {
+        errorMsg = 'Email already registered. Please sign in instead.';
+        signupEmailErr.textContent = errorMsg;
+      } else if (error.code === 'auth/weak-password') {
+        errorMsg = 'Password should be at least 6 characters';
+      }
+      showToast(errorMsg, true);
+    }
+  }
+
+  // LOGIN logic with Firebase
+  async function handleLogin() {
+    clearErrors();
+    let valid = true;
+    const email = loginEmail.value.trim();
+    const pass = loginPassword.value;
+
+    if (!email) {
+      loginEmailErr.textContent = 'Email is required';
+      valid = false;
+    } else if (!isValidEmail(email)) {
+      loginEmailErr.textContent = 'Enter a valid email address';
+      valid = false;
+    }
+
+    if (!pass) {
+      loginPasswordErr.textContent = 'Password is required';
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    const loginBtn = document.getElementById('loginBtn');
+    showLoading(loginBtn, true);
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+      const user = userCredential.user;
+      
+      showLoading(loginBtn, false);
+      showToast('Login successful! Redirecting to dashboard...');
+      
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1500);
+      
+    } catch (error) {
+      showLoading(loginBtn, false);
+      let errorMsg = error.message;
+      if (error.code === 'auth/user-not-found') {
+        errorMsg = 'No account found with this email';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMsg = 'Incorrect password';
+      } else if (error.code === 'auth/invalid-credential') {
+        errorMsg = 'Invalid email or password';
+      }
+      loginPasswordErr.textContent = errorMsg;
+      showToast(errorMsg, true);
+    }
+  }
+
+  // Forgot password
+  async function handleForgotPassword() {
+    const email = loginEmail.value.trim();
+    if (!email) {
+      showToast('Please enter your email address first', true);
+      loginEmail.focus();
+      return;
+    }
+    if (!isValidEmail(email)) {
+      showToast('Please enter a valid email address', true);
+      return;
+    }
+    
+    showToast('Sending reset email...');
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showToast('Password reset email sent! Check your inbox.');
+    } catch (error) {
+      showToast(error.message, true);
+    }
+  }
+
+  // Event listeners
+  document.getElementById('signupBtn').addEventListener('click', handleSignup);
+  document.getElementById('loginBtn').addEventListener('click', handleLogin);
+  document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    handleForgotPassword();
+  });
+
+  // Social login placeholders
+  document.querySelectorAll('.social-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+      showToast('Social login coming soon! Use email for now.');
+    });
+  });
+
+  // Confirm password validation
+  if (signupConfirm) {
+    signupConfirm.addEventListener('input', () => {
+      if (signupConfirm.value !== signupPassword.value) {
+        signupConfirmErr.textContent = 'Passwords do not match';
+      } else {
+        signupConfirmErr.textContent = '';
+      }
+    });
+  }
+  <script type="module">
+  // Add this to your existing signup script
+  const urlParams = new URLSearchParams(window.location.search);
+  const referralCode = urlParams.get('ref');
+  if (referralCode) {
+    document.getElementById('referralCode').value = referralCode;
+    showNotification('🎉 Referral Detected!', `You were referred by a friend! Both of you will get UGX 5,000 bonus after your first deposit!`, 'success');
+  }
+  
+  // In your signup function, after creating user, add:
+  if (referralCode) {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("referralCode", "==", referralCode.toUpperCase()));
+    const querySnap = await getDocs(q);
+    if (!querySnap.empty) {
+      const referrerDoc = querySnap.docs[0];
+      const referrerRef = doc(db, "users", referrerDoc.id);
+      await updateDoc(referrerRef, {
+        referrals: increment(1),
+        referralBonus: increment(5000),
+        totalBalance: increment(5000)
+      });
+      
+      await addDoc(collection(db, "users", referrerDoc.id, "transactions"), {
+        type: 'referral_bonus',
+        amount: 5000,
+        referredUser: user.uid,
+        referredEmail: email,
+        date: serverTimestamp(),
+        status: 'completed'
+      });
+    }
+  }
+</script>
+</body>
+</html>
