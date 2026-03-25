@@ -1,331 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Foram Invest</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fb;
-        }
-        .navbar {
-            background: white;
-            padding: 0.8rem 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
-        .logo {
-            font-size: 1.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1e3c4a, #2c5f8a);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-decoration: none;
-        }
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: #4a5568;
-            font-weight: 500;
-        }
-        .nav-links a:hover, .nav-links a.active {
-            color: #2c5f8a;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        .page-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .page-header h1 {
-            font-size: 2rem;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-        .page-header p {
-            color: #64748b;
-        }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-        .contact-info {
-            background: white;
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .contact-info h2 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #1e293b;
-        }
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 0.8rem;
-            background: #f8fafc;
-            border-radius: 12px;
-        }
-        .info-icon {
-            font-size: 1.8rem;
-        }
-        .info-text h3 {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-bottom: 0.2rem;
-        }
-        .info-text p {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #1e293b;
-        }
-        .contact-form {
-            background: white;
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .contact-form h2 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #1e293b;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.3rem;
-            font-weight: 500;
-            font-size: 0.85rem;
-            color: #4a5568;
-        }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 0.7rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 0.9rem;
-        }
-        .btn-primary {
-            background: #1f3b4c;
-            color: white;
-            border: none;
-            padding: 0.8rem;
-            border-radius: 40px;
-            width: 100%;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            justify-content: center;
-        }
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #f1f5f9;
-            border-radius: 30px;
-            text-decoration: none;
-            color: #1e293b;
-            font-size: 0.85rem;
-        }
-        .map-container {
-            margin-top: 2rem;
-            background: white;
-            border-radius: 20px;
-            padding: 1rem;
-        }
-        .success-message {
-            background: #dcfce7;
-            color: #16a34a;
-            padding: 0.6rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            text-align: center;
-        }
-        .error-message {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 0.6rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            text-align: center;
-        }
-        @media (max-width: 768px) {
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .footer {
-            background: #0f172a;
-            color: #94a3b8;
-            padding: 2rem 1rem;
-            text-align: center;
-            margin-top: 2rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Contact Us - Foram Invest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #0B1120 0%, #111827 100%);
+      min-height: 100vh;
+      color: #f1f5f9;
+    }
+    .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.3; z-index: 0; pointer-events: none; }
+    .orb-1 { width: 40vw; height: 40vw; background: #10b981; top: -10%; left: -10%; animation: float 18s infinite alternate; }
+    .orb-2 { width: 35vw; height: 35vw; background: #059669; bottom: -15%; right: -5%; animation: float 22s infinite alternate-reverse; }
+    @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 40px) scale(1.1); } }
+    
+    .navbar {
+      position: fixed; top: 0; width: 100%; padding: 1rem 2rem;
+      background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 100;
+    }
+    .nav-container { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration: none; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: #94a3b8; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #10b981; }
+    .btn-outline { background: transparent; border: 1px solid #10b981; padding: 0.4rem 1rem; border-radius: 40px; color: #10b981; cursor: pointer; }
+    
+    .main-content { max-width: 1280px; margin: 0 auto; padding: 6rem 2rem 2rem; position: relative; z-index: 10; }
+    .page-header { text-align: center; margin-bottom: 2rem; }
+    .page-header h1 { font-size: 2.5rem; background: linear-gradient(135deg, #fff, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .contact-info, .contact-form {
+      background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(8px);
+      border-radius: 1.5rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
+    }
+    .info-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(15,23,42,0.5); border-radius: 1rem; margin-bottom: 1rem; }
+    .info-icon { font-size: 1.5rem; color: #10b981; }
+    .info-text h3 { font-size: 0.85rem; color: #94a3b8; }
+    .info-text p { font-size: 1rem; font-weight: 500; }
+    .social-links { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: center; }
+    .social-link { background: #1e293b; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #94a3b8; transition: all 0.2s; text-decoration: none; }
+    .social-link:hover { background: #10b981; color: white; transform: translateY(-3px); }
+    
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: #94a3b8; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 0.8rem; background: #1e293b; border: 1px solid #334155;
+      border-radius: 1rem; color: white; font-family: 'Inter', sans-serif;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: #10b981;
+    }
+    .btn-primary { background: #10b981; color: white; border: none; padding: 0.8rem; border-radius: 1rem; font-weight: 600; cursor: pointer; width: 100%; }
+    .btn-primary:hover { background: #059669; transform: translateY(-2px); }
+    
+    .map-container { margin-top: 2rem; background: rgba(30, 41, 59, 0.6); border-radius: 1.5rem; padding: 1rem; text-align: center; }
+    .success-message { background: rgba(16,185,129,0.2); color: #10b981; padding: 0.8rem; border-radius: 1rem; margin-top: 1rem; text-align: center; }
+    
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } .main-content { padding: 5rem 1rem 1rem; } .nav-container { flex-direction: column; } }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">⚡ FORAM INVEST</a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="contact.html" class="active">Contact</a>
-                <a href="support.html">Support</a>
-                <a href="login.html" class="btn-outline" style="border:1px solid #2c5f8a; padding:0.3rem 0.8rem; border-radius:30px;">Login</a>
-                <a href="signup.html" class="btn-primary" style="padding:0.3rem 0.8rem;">Sign Up</a>
-            </div>
-        </div>
-    </nav>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 
-    <div class="container">
-        <div class="page-header">
-            <h1>Contact Us</h1>
-            <p>We're here to help. Reach out to us anytime</p>
-        </div>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">⚡ FORAM INVEST</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="support.html">Support</a>
+      <a href="contact.html" class="active">Contact</a>
+      <a href="login.html" class="btn-outline">Sign In</a>
+    </div>
+  </div>
+</nav>
 
-        <div class="contact-grid">
-            <div class="contact-info">
-                <h2>Get in Touch</h2>
-                <div class="info-item">
-                    <div class="info-icon"></div>
-                    <div class="info-text">
-                        <h3>Address</h3>
-                        <p>Kampala, Uganda</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-icon">☎️</div>
-                    <div class="info-text">
-                        <h3>Phone</h3>
-                        <p>+256 740 327 473</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-icon">✉️</div>
-                    <div class="info-text">
-                        <h3>Email</h3>
-                        <p>support@foraminvest.com</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <div class="info-icon">⏱️</div>
-                    <div class="info-text">
-                        <h3>Support Hours</h3>
-                        <p>24/7 Customer Support</p>
-                    </div>
-                </div>
-                
-                <h2 style="margin-top: 1rem;">Follow Us</h2>
-                <div class="social-links">
-                    <a href="#" class="social-link"> Facebook</a>
-                    <a href="#" class="social-link"> Twitter</a>
-                    <a href="#" class="social-link"> Instagram</a>
-                    <a href="#" class="social-link">LinkedIn</a>
-                </div>
-            </div>
+<div class="main-content">
+  <div class="page-header">
+    <h1>Contact Us</h1>
+    <p>We're here to help. Reach out to us anytime</p>
+  </div>
 
-            <div class="contact-form">
-                <h2>Send us a Message</h2>
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label>Full Name *</label>
-                        <input type="text" id="contactName" required placeholder="John Doe">
-                    </div>
-                    <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" id="contactEmail" required placeholder="you@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <select id="contactSubject">
-                            <option>General Inquiry</option>
-                            <option>Investment Question</option>
-                            <option>Account Support</option>
-                            <option>Withdrawal Issue</option>
-                            <option>Complaint</option>
-                            <option>Partnership</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Message *</label>
-                        <textarea id="contactMessage" rows="5" required placeholder="How can we help you?"></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary">Send Message</button>
-                    <div id="contactMsg"></div>
-                </form>
-            </div>
-        </div>
-
-        <div class="map-container">
-            <h2 style="margin-bottom: 1rem;">Our Location</h2>
-            <div style="background: #e2e8f0; height: 300px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                <p>Kampala, Uganda - Coming Soon</p>
-            </div>
-        </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h2><i class="fas fa-address-card"></i> Get in Touch</h2>
+      <div class="info-item"><div class="info-icon"><i class="fas fa-map-marker-alt"></i></div><div class="info-text"><h3>Address</h3><p>Kampala, Uganda</p></div></div>
+      <div class="info-item"><div class="info-icon"><i class="fas fa-phone"></i></div><div class="info-text"><h3>Phone</h3><p>+256 740 327 473</p></div></div>
+      <div class="info-item"><div class="info-icon"><i class="fas fa-envelope"></i></div><div class="info-text"><h3>Email</h3><p>support@foraminvest.com</p></div></div>
+      <div class="info-item"><div class="info-icon"><i class="fas fa-clock"></i></div><div class="info-text"><h3>Support Hours</h3><p>24/7 Customer Support</p></div></div>
+      
+      <h2 style="margin-top: 1.5rem;"><i class="fas fa-share-alt"></i> Follow Us</h2>
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+      </div>
     </div>
 
-    <footer class="footer">
-        <p>© 2025 Foram Invest — Secure investment platform. All rights reserved.</p>
-    </footer>
+    <div class="contact-form">
+      <h2><i class="fas fa-paper-plane"></i> Send us a Message</h2>
+      <form id="contactForm">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="contactName" required></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="contactEmail" required></div>
+        <div class="form-group"><label>Subject</label><select id="contactSubject"><option>General Inquiry</option><option>Investment Question</option><option>Account Support</option><option>Withdrawal Issue</option><option>Complaint</option></select></div>
+        <div class="form-group"><label>Message *</label><textarea id="contactMessage" rows="4" required></textarea></div>
+        <button type="submit" class="btn-primary">Send Message</button>
+        <div id="contactMsg"></div>
+      </form>
+    </div>
+  </div>
 
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('contactName').value;
-            const email = document.getElementById('contactEmail').value;
-            const subject = document.getElementById('contactSubject').value;
-            const message = document.getElementById('contactMessage').value;
-            
-            if (!name || !email || !message) {
-                document.getElementById('contactMsg').innerHTML = '<div class="error-message">Please fill all required fields</div>';
-                return;
-            }
-            
-            // Simulate sending message
-            document.getElementById('contactMsg').innerHTML = '<div class="success-message">Message sent! We\'ll respond within 24 hours.</div>';
-            document.getElementById('contactForm').reset();
-            setTimeout(() => {
-                document.getElementById('contactMsg').innerHTML = '';
-            }, 3000);
-        });
-    </script>
+  <div class="map-container">
+    <p><i class="fas fa-map-marker-alt"></i> Kampala, Uganda — Our headquarters</p>
+  </div>
+</div>
+
+<script>
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    document.getElementById('contactMsg').innerHTML = '<div class="success-message">✅ Message sent! We\'ll respond within 24 hours.</div>';
+    document.getElementById('contactForm').reset();
+    setTimeout(() => document.getElementById('contactMsg').innerHTML = '', 3000);
+  });
+</script>
 </body>
 </html>
