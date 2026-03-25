@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Foram Invest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fb;
+        }
+        .navbar {
+            background: white;
+            padding: 0.8rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e3c4a, #2c5f8a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #2c5f8a;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .hero-about {
+            background: linear-gradient(135deg, #1e3c4a 0%, #2c5f8a 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+        .hero-about h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .hero-about p {
+            font-size: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+        .section p {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .mission-card, .vision-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .mission-card h3, .vision-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #2c5f8a;
+        }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .value-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 16px;
+        }
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .value-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        .value-card p {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .team-card {
+            text-align: center;
+            padding: 1rem;
+        }
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+        .team-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+        .team-card p {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .stats-about {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c5f8a;
+        }
+        .btn-outline {
+            border: 1px solid #2c5f8a;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #2c5f8a;
+        }
+        .btn-primary {
+            background: #1f3b4c;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .mission-vision {
+                grid-template-columns: 1fr;
+            }
+            .stats-about {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            img{
+                border-radius: 200%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">⚡ FORAM INVEST</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html" class="active">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="support.html">Support</a>
+                <a href="login.html" class="btn-outline">Login</a>
+                <a href="signup.html" class="btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-about">
+            <h1>About Foram Invest</h1>
+            <p>Empowering investors across Africa with secure, transparent, and profitable investment opportunities</p>
+        </div>
+
+        <div class="mission-vision">
+            <div class="mission-card">
+                <h3>🎯 Our Mission</h3>
+                <p>To democratize investing by providing accessible, secure, and profitable investment opportunities for everyone, regardless of their financial background.</p>
+            </div>
+            <div class="vision-card">
+                <h3>👁️ Our Vision</h3>
+                <p>To become Africa's most trusted investment platform, empowering millions to achieve financial freedom through smart investing.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Who We Are</h2>
+            <p>Foram Invest is a premier investment platform founded in 2025 with a mission to make investing accessible to everyone. We combine cutting-edge technology with proven investment strategies to deliver consistent returns to our investors.</p>
+            <p>Our team consists of experienced financial experts, tech innovators, and customer service professionals dedicated to providing the best investment experience in Africa.</p>
+        </div>
+
+        <div class="section">
+            <h2>Our Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">🔒</div>
+                    <h4>Security First</h4>
+                    <p>Your investments are protected with bank-level security and insurance</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">📈</div>
+                    <h4>Transparency</h4>
+                    <p>Clear terms, real-time tracking, and no hidden fees</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h4>Customer Focus</h4>
+                    <p>24/7 support dedicated to your success</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💡</div>
+                    <h4>Innovation</h4>
+                    <p>Continuously improving with cutting-edge technology</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Our Impact</h2>
+            <div class="stats-about">
+                <div>
+                    <div class="stat-number">10,000+</div>
+                    <p>Active Investors</p>
+                </div>
+                <div>
+                    <div class="stat-number">UGX 50B+</div>
+                    <p>Total Invested</p>
+                </div>
+                <div>
+                    <div class="stat-number">98%</div>
+                    <p>Satisfaction Rate</p>
+                </div>
+                <div>
+                    <div class="stat-number">24/7</div>
+                    <p>Support Available</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Leadership Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                    </div>
+                        <h4>Mukisa Abraham</h4>
+                    <p>CEO & Founder</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                    </div>
+                        <h4>Namaganda Sarah</h4>
+                    <p>Head of Investments</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">
+                    </div>
+                        <h4>Michael Okello</h4>
+                    <p>CTO</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar"><img src=""></div>
+                    <h4>Sarah Namutebi</h4>
+                    <p>Customer Success Lead</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Foram Invest — Secure investment platform. All rights reserved.</p>
+    </footer>
+</body>
+</html>

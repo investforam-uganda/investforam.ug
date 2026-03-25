@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Foram Invest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c4a 0%, #2c5f8a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .auth-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .auth-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-decoration: none;
+            color: #1e293b;
+        }
+        .auth-header h2 {
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background: #1f3b4c;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 40px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .auth-footer a {
+            color: #2c5f8a;
+            text-decoration: none;
+        }
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.6rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .loading-overlay.active { display: flex; }
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="index.html" class="auth-logo">⚡ FORAM INVEST</a>
+                <h2>Welcome Back</h2>
+                <p>Sign in to your account</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="••••••">
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+                <div id="loginError" class="error-message" style="display:none;"></div>
+            </form>
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="signup.html">Create Account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCX-ag3dli4j1DyP4nJKiO58yOEyQy-_5c",
+            authDomain: "invest-foram-platform.firebaseapp.com",
+            projectId: "invest-foram-platform",
+            storageBucket: "invest-foram-platform.firebasestorage.app",
+            messagingSenderId: "284475751069",
+            appId: "1:284475751069:web:008f29e8696f483c19b274"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('loginForm');
+        const errorDiv = document.getElementById('loginError');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        function showLoading(show) {
+            if (show) loadingOverlay.classList.add('active');
+            else loadingOverlay.classList.remove('active');
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                errorDiv.textContent = 'Please enter email and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                await updateDoc(doc(db, "users", user.uid), {
+                    lastLogin: serverTimestamp()
+                });
+                
+                showLoading(false);
+                window.location.href = 'dashboard.html';
+                
+            } catch (error) {
+                showLoading(false);
+                let msg = error.message;
+                if (error.code === 'auth/user-not-found') msg = 'No account found';
+                else if (error.code === 'auth/wrong-password') msg = 'Incorrect password';
+                errorDiv.textContent = msg;
+                errorDiv.style.display = 'block';
+                setTimeout(() => errorDiv.style.display = 'none', 3000);
+            }
+        });
+    </script>
+</body>
+</html>

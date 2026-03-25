@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Foram Invest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fb;
+        }
+        .navbar {
+            background: white;
+            padding: 0.8rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e3c4a, #2c5f8a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #2c5f8a;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .support-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        /* FAQs Section */
+        .faq-section {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .faq-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+        .faq-question {
+            padding: 1rem 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        .faq-question:hover {
+            color: #2c5f8a;
+        }
+        .faq-answer {
+            padding: 0 0 1rem 0;
+            display: none;
+            color: #64748b;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+        .faq-answer.active {
+            display: block;
+        }
+        /* Chatbot Section */
+        .chatbot-section {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        .chatbot-header {
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .chatbot-header h2 {
+            font-size: 1.3rem;
+            color: #1e293b;
+        }
+        .chatbot-header p {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .message {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 90%;
+        }
+        .message.bot {
+            align-self: flex-start;
+        }
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .message-content {
+            background: #f1f5f9;
+            padding: 0.6rem 1rem;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        .message.user .message-content {
+            background: #1f3b4c;
+            color: white;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 0.7rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+        .chat-input-area button {
+            background: #1f3b4c;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .quick-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .btn-outline {
+            border: 1px solid #2c5f8a;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #2c5f8a;
+        }
+        .btn-primary {
+            background: #1f3b4c;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+            .chatbot-section {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">⚡ FORAM INVEST</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="support.html" class="active">Support</a>
+                <a href="login.html" class="btn-outline">Login</a>
+                <a href="signup.html" class="btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Support Center</h1>
+            <p>Get help from our AI assistant or browse frequently asked questions</p>
+        </div>
+
+        <div class="support-grid">
+            <!-- FAQs Section -->
+            <div class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I create an account?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">Click on "Create Account" on the homepage, fill in your details including full name, email, and phone number. You'll receive a verification code to complete registration.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What is the minimum investment amount?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">The minimum investment amount is UGX 300,000 for the Basic Plan. Other plans have higher minimums: Growth Plan (UGX 1,000,000), Premium Plan (UGX 3,000,000), and VIP Plan (UGX 10,000,000).</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I make a deposit?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">Go to your dashboard, click "Deposit", select your payment method (MTN Mobile Money, Airtel Money, or Bank Transfer), enter your phone number and amount, then confirm. You'll receive a confirmation once processed.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I withdraw my money?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">Navigate to your dashboard, click "Withdraw", select your withdrawal method, enter your phone number/account details, and the amount. Withdrawals are processed within 24-48 hours.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What are the investment returns?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">Returns vary by plan: Basic Plan (2% weekly), Standard Plan (5% bi-weekly), Growth Plan (12% monthly), Premium Plan (25% quarterly), VIP Plan (50% annually).</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is my money safe?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">Yes! We use bank-level security encryption, and all transactions are monitored. Your funds are held in secure accounts with top-tier financial institutions.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How does the referral system work?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">Share your unique referral code with friends. When they sign up using your code and make their first deposit, you'll receive UGX 5,000 credited to your account.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I change my investment plan?</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="faq-answer">Yes, you can upgrade your plan at any time. Contact support or make a new investment with a higher plan to upgrade automatically.</div>
+                </div>
+            </div>
+
+            <!-- AI Chatbot Section -->
+            <div class="chatbot-section">
+                <div class="chatbot-header">
+                    <h2>🤖 Foram AI Assistant</h2>
+                    <p>Ask me anything about investing, accounts, or support</p>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">Hello! I'm Foram AI Assistant. How can I help you today? You can ask me about investments, deposits, withdrawals, or account management.</div>
+                    </div>
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="quick-btn" data-question="How do I invest?">💡 How do I invest?</button>
+                    <button class="quick-btn" data-question="Minimum deposit?">💰 Minimum deposit?</button>
+                    <button class="quick-btn" data-question="Withdrawal process?">💸 Withdrawal process?</button>
+                    <button class="quick-btn" data-question="Referral bonus?">🤝 Referral bonus?</button>
+                    <button class="quick-btn" data-question="Investment returns?">📈 Returns?</button>
+                </div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type your question..." onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Foram Invest — Secure investment platform. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                answer.classList.toggle('active');
+                const icon = question.querySelector('span:last-child');
+                icon.textContent = answer.classList.contains('active') ? '▲' : '▼';
+            });
+        });
+
+        // AI Chatbot Responses
+        const botResponses = {
+            default: "I understand you're asking about that. For specific details, please check our FAQs or contact support. Can I help with something else?",
+            
+            "how do i invest": "To invest: 1) Login to your dashboard, 2) Click 'Invest Now', 3) Select your preferred plan (Basic, Growth, Premium, or VIP), 4) Enter the amount (minimum varies by plan), 5) Confirm your investment. The funds will be deducted from your balance and start earning returns immediately!",
+            
+            "minimum deposit": "The minimum deposit is UGX 5,000. You can deposit via MTN Mobile Money, Airtel Money, or Bank Transfer. Deposits are processed instantly and reflect in your balance immediately.",
+            
+            "withdrawal": "To withdraw: 1) Go to dashboard, 2) Click 'Withdraw', 3) Select withdrawal method (MTN/Airtel/Bank), 4) Enter your phone number/account details, 5) Enter amount (minimum UGX 5000). Withdrawals are processed within 1 to 10seconds.",
+            
+            "referral": "Our referral program gives you UGX 5,000 for every friend who signs up using your referral code and makes their first deposit! Share your unique code from your dashboard. There's no limit to how many people you can refer.",
+            
+            "returns": "Returns vary by plan: Basic (5% weekly), Standard (10% bi-weekly), Growth (20% monthly), Premium (25% quarterly), VIP (50% annually). Returns are calculated based on your investment amount and plan duration.",
+            
+            "create account": "To create an account: 1) Click 'Create Account' on homepage, 2) Enter your full name, email, and create a strong password, 3) Add your phone number, 4) Enter any referral code if you have one, 5) Accept terms and submit. You'll receive a confirmation email.",
+            
+            "forgot password": "If you forgot your password, click 'Forgot Password' on the login page. Enter your email address, and we'll send you a password reset link. Follow the instructions to create a new password.",
+            
+            "how to deposit": "To deposit: 1) Login, 2) Click 'Deposit' on your dashboard, 3) Choose payment method (MTN/Airtel/Bank), 4) Enter your phone number, 5) Enter amount (min UGX 5,000), 6) Provide transaction reference, 7) Click confirm. The funds will be added to your balance immediately.",
+            
+            "investment plans": "We offer 5 investment plans: Basic (5% weekly, min UGX 10000), Standard (10% bi-weekly, min UGX 30000), Growth (20% monthly, min UGX 100k), Premium (25% quarterly, min UGX 200k), VIP (50% annually, min UGX 1M).",
+            
+            "support": "Our support team is available 24/7. You can email us at support@foraminvest.com, call +256 740 327 473, or use this chat assistant for quick answers to common questions.",
+            
+            "security": "Your security is our priority! We use bank-level 256-bit encryption, two-factor authentication, and secure servers. All transactions are monitored 24/7 for suspicious activity.",
+            
+            "verification": "Account verification happens automatically during signup. You'll receive a verification email. For larger withdrawals, we may request additional ID verification to ensure security.",
+            
+            "contact": "You can reach us via email at support@foraminvest.com, phone at +256 740 327 473, or through our contact form. Our support team is available 24/7 to assist you.",
+            
+            "bonus": "New users get a UGX 5,000 welcome bonus when they make their first deposit! Additionally, refer friends to earn UGX 5,000 per successful referral. Bonuses are automatically added to your balance."
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Get bot response
+            setTimeout(() => {
+                const response = getBotResponse(message);
+                addMessage(response, 'bot');
+            }, 500);
+        }
+
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${sender === 'bot' ? '🤖' : '👤'}</div>
+                <div class="message-content">${text}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getBotResponse(question) {
+            const lowerQuestion = question.toLowerCase();
+            
+            // Check for matches
+            for (const [key, response] of Object.entries(botResponses)) {
+                if (lowerQuestion.includes(key)) {
+                    return response;
+                }
+            }
+            
+            // Check for greetings
+            if (lowerQuestion.includes('hello') || lowerQuestion.includes('hi') || lowerQuestion.includes('hey')) {
+                return "Hello! Welcome to Foram Invest support. How can I assist you today? You can ask about investments, deposits, withdrawals, or account management.";
+            }
+            
+            if (lowerQuestion.includes('thank')) {
+                return "You're welcome! Is there anything else I can help you with?";
+            }
+            
+            if (lowerQuestion.includes('bye') || lowerQuestion.includes('goodbye')) {
+                return "Thank you for chatting! If you have more questions, feel free to ask anytime. Have a great day!";
+            }
+            
+            // Default response
+            return "I'm not sure I understand. Could you please rephrase your question? You can ask about:\n• How to invest\n• Minimum deposit\n• Withdrawal process\n• Referral program\n• Investment returns\n• Account creation\n• Security\n\nOr check our FAQs for more information!";
+        }
+
+        // Quick action buttons
+        document.querySelectorAll('.quick-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const question = btn.getAttribute('data-question');
+                addMessage(question, 'user');
+                setTimeout(() => {
+                    const response = getBotResponse(question);
+                    addMessage(response, 'bot');
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

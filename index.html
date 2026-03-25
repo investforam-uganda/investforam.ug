@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Foram Invest - Smart Investment Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Navigation - Responsive */
+        .navbar {
+            background: white;
+            padding: 0.8rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            background: linear-gradient(135deg, #1e3c4a, #2c5f8a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #2c5f8a;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            color: #2c5f8a;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background: #1f3b4c;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3c4a 0%, #2c5f8a 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 2rem 1rem;
+            background: white;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 1.5rem;
+            color: #2c5f8a;
+        }
+
+        .stat-item p {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Plans Section */
+        .plans {
+            padding: 2rem 1rem;
+            background: #f8fafc;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .plan-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .plan-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.2rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .plan-card.popular {
+            border: 2px solid #ffd700;
+            transform: scale(1.02);
+        }
+
+        .plan-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            background: #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .plan-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c5f8a;
+            margin-bottom: 1rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .plan-features li {
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        .invest-btn {
+            background: #1f3b4c;
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Features */
+        .features {
+            padding: 2rem 1rem;
+            background: white;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .feature-card p {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 2rem 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 400px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2c5f8a;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .plan-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Invisible Admin Dots */
+        .admin-dots {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            cursor: pointer;
+            padding: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 999;
+        }
+        .admin-dots:hover {
+            opacity: 0.3;
+        }
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #1e293b;
+            border-radius: 50%;
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">FORAM INVEST</span>
+            </div>
+            <div class="nav-links">
+               <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="support.html">Support</a>
+    <a href="login.html" class="btn-outline">Sign In</a>
+    <a href="signup.html" class="btn-primary">Create Account</a>
+</div>
+                <div id="userMenu" style="display: none;">
+                    <span id="userName" class="user-name"></span>
+                    <button id="logoutBtn" class="btn-outline" style="margin-left: 0.5rem;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Grow your wealth with <span style="color: #ffd700;">With number one investment platform</span></h1>
+            <p>Foram Invest offers flexible investment plans, daily returns ,withdraws anytime, and complete transparency.</p>
+            <div class="hero-buttons">
+                <a href="signup.html" class="btn-primary">Get Started</a>
+                <a href="#plans" class="btn-outline">View Plans</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3 id="totalInvestedStat">UGX 500M+</h3>
+                <p>Total Invested</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="activeInvestorsStat">15,000+</h3>
+                <p>Active Investors</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="supportHoursStat">24/7</h3>
+                <p>Customer Support</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="satisfactionRate">98%</h3>
+                <p>Satisfaction Rate</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="plans" class="plans">
+        <div class="container">
+            <h2 class="section-title">🔥 Investment Plans</h2>
+            <p class="section-subtitle">Choose the plan that fits your financial goals</p>
+            <div class="plan-grid">
+                <div class="plan-card">
+                    <div class="plan-badge">STARTER</div>
+                    <h3>Basic Plan</h3>
+                    <div class="plan-price">UGX 10,000 – 99,999</div>
+                    <ul class="plan-features">
+                        <li>✨ 5% monthly return</li>
+                        <li>🔒 Capital protection</li>
+                        <li>💰 Instant withdrawal</li>
+                    </ul>
+                    <button class="invest-btn" data-plan="Basic Plan" data-min="300000">Invest Now</button>
+                </div>
+                <div class="plan-card popular">
+                    <div class="plan-badge">🔥 POPULAR</div>
+                    <h3>Growth Plan</h3>
+                    <div class="plan-price">UGX 100,000 – 199,999</div>
+                    <ul class="plan-features">
+                        <li>✨ 12% monthly return</li>
+                        <li>🎁 Bonus 5% on reinvest</li>
+                        <li>💎 Priority support</li>
+                    </ul>
+                    <button class="invest-btn" data-plan="Growth Plan" data-min="1000000">Invest Now</button>
+                </div>
+                <div class="plan-card">
+                    <div class="plan-badge">👑 VIP</div>
+                    <h3>Premium Plan</h3>
+                    <div class="plan-price">UGX 200,000+</div>
+                    <ul class="plan-features">
+                        <li>✨ 25% upto 50% monthly return</li>
+                        <li>💡 Personal advisor</li>
+                        <li>🚀 Early access</li>
+                    </ul>
+                    <button class="invest-btn" data-plan="Premium Plan" data-min="5000000">Invest Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Platform</h3>
+                <p>Bank-level security</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Daily Returns and withdraw</h3>
+                <p>Profits credited daily and instant withdraws with no
+                    limit
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Referral Bonus</h3>
+                <p>Earn up to 5% commission</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⏱️</div>
+                <h3>24/7 Support</h3>
+                <p>Dedicated support team</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 Foram Invest — Secure investment platform. Your capital is at risk.</p>
+    </footer>
+
+    <!-- Invisible Admin Dots -->
+    <div class="admin-dots" id="adminDots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCX-ag3dli4j1DyP4nJKiO58yOEyQy-_5c",
+            authDomain: "invest-foram-platform.firebaseapp.com",
+            projectId: "invest-foram-platform",
+            storageBucket: "invest-foram-platform.firebasestorage.app",
+            messagingSenderId: "284475751069",
+            appId: "1:284475751069:web:008f29e8696f483c19b274"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Load homepage stats
+        async function loadHomepageStats() {
+            try {
+                const docRef = doc(db, "settings", "homepage");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('totalInvestedStat').innerHTML = `UGX ${(data.totalInvested || 10000000).toLocaleString()}+`;
+                    document.getElementById('activeInvestorsStat').innerHTML = `${(data.activeInvestors || 15000).toLocaleString()}+`;
+                    document.getElementById('supportHoursStat').innerHTML = data.supportHours || '24/7';
+                    document.getElementById('satisfactionRate').innerHTML = `${data.satisfactionRate || 98}%`;
+                }
+            } catch(e) { console.log('Stats load error:', e); }
+        }
+        loadHomepageStats();
+
+        // Auth state
+        onAuthStateChanged(auth, async (user) => {
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userNameSpan = document.getElementById('userName');
+            
+            if (user) {
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                try {
+                    const userRef = doc(db, "users", user.uid);
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        userNameSpan.textContent = `Welcome, ${userSnap.data().fullName?.split(' ')[0] || 'User'}`;
+                    } else {
+                        userNameSpan.textContent = `Welcome, ${user.email?.split('@')[0]}`;
+                    }
+                } catch(e) { userNameSpan.textContent = `Welcome, Investor`; }
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        });
+
+        // Invest buttons
+        document.querySelectorAll('.invest-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (auth.currentUser) {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Please login first to invest');
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+
+        // Admin access - triple click dots
+        let adminClickCount = 0;
+        let adminTimer;
+        const adminDots = document.getElementById('adminDots');
+        adminDots.addEventListener('click', () => {
+            adminClickCount++;
+            if (adminClickCount === 1) {
+                adminTimer = setTimeout(() => { adminClickCount = 0; }, 1000);
+            }
+            if (adminClickCount === 3) {
+                window.location.href = 'admin-login.html';
+                adminClickCount = 0;
+                clearTimeout(adminTimer);
+            }
+        });
+    </script>
+</body>
+</html>

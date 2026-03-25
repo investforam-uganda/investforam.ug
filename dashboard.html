@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dashboard - Foram Invest</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fb; }
+        .navbar { background: white; padding: 0.8rem 1rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        .logo { font-size: 1.2rem; font-weight: 800; background: linear-gradient(135deg, #1e3c4a, #2c5f8a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .btn-outline { background: transparent; border: 1.5px solid #2c5f8a; padding: 0.3rem 0.8rem; border-radius: 30px; color: #2c5f8a; cursor: pointer; font-weight: 500; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1rem; }
+        .stat-card { background: white; border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 0.8rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .stat-icon { font-size: 1.8rem; }
+        .stat-info h3 { font-size: 0.7rem; color: #64748b; }
+        .stat-value { font-size: 1rem; font-weight: 700; color: #1e293b; }
+        .card { background: white; border-radius: 16px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card h3 { margin-bottom: 0.8rem; font-size: 1rem; color: #1e293b; }
+        .button-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .btn-deposit { background: #10b981; color: white; border: none; padding: 0.7rem; border-radius: 30px; font-weight: 600; cursor: pointer; flex: 1; }
+        .btn-withdraw { background: #ef4444; color: white; border: none; padding: 0.7rem; border-radius: 30px; font-weight: 600; cursor: pointer; flex: 1; }
+        .btn-invest { background: #f59e0b; color: white; border: none; padding: 0.7rem; border-radius: 30px; font-weight: 600; cursor: pointer; flex: 1; }
+        .form-group { margin-bottom: 0.8rem; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: 500; font-size: 0.85rem; color: #4a5568; }
+        .form-group input, .form-group select { width: 100%; padding: 0.7rem; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 0.9rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 20px; padding: 1.2rem; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .close-modal { font-size: 1.5rem; cursor: pointer; color: #64748b; }
+        .investment-item { background: #f8fafc; padding: 0.8rem; border-radius: 12px; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; border-left: 3px solid #10b981; }
+        .success-message { background: #dcfce7; color: #16a34a; padding: 0.5rem; border-radius: 8px; margin-top: 0.5rem; text-align: center; }
+        .error-message { background: #fee2e2; color: #dc2626; padding: 0.5rem; border-radius: 8px; margin-top: 0.5rem; text-align: center; }
+        .referral-code-box { background: #f1f5f9; padding: 0.8rem; border-radius: 12px; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .referral-code-box code { flex: 1; font-size: 1rem; font-weight: bold; color: #1f3b4c; }
+        .rate-badge { background: #10b981; color: white; padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.7rem; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .loading-overlay.active { display: flex; }
+        .loader { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .payment-method-btn { transition: all 0.3s; }
+        .payment-method-btn.selected { border-color: #10b981 !important; background: #dcfce7 !important; }
+        .amount-btn { background: #f1f5f9; border: 1px solid #e2e8f0; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
+        @media (min-width: 768px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">⚡ FORAM INVEST</div>
+            <div>
+                <span id="userName" style="margin-right: 0.8rem;"></span>
+                <button id="logoutBtn" class="btn-outline">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="card">
+            <h3>💰 Quick Actions</h3>
+            <div class="button-group">
+                <button class="btn-deposit" id="depositBtn">💰 Deposit</button>
+                <button class="btn-withdraw" id="withdrawBtn">💸 Withdraw</button>
+                <button class="btn-invest" id="investBtn">📈 Invest Now</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🤝 Refer & Earn</h3>
+            <div class="referral-code-box">
+                <code id="referralCode">Loading...</code>
+                <button id="copyCodeBtn" class="btn-outline" style="padding: 0.3rem 0.8rem;">Copy</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 0.8rem;">
+                <span>📊 Referrals: <strong id="referralCount">0</strong></span>
+                <span>🎁 Bonus: <strong id="referralBonus">UGX 0</strong></span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📜 Transaction History</h3>
+            <div id="transactionHistory" style="max-height: 300px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💰 Make a Deposit</h3>
+                <span class="close-modal" id="closeDepositModal">&times;</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Select Payment Method</label>
+                <div style="display: flex; gap: 0.8rem;">
+                    <button type="button" class="payment-method-btn" data-method="mobile" style="flex:1; padding: 0.8rem; background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px;">
+                        📱 Mobile Money
+                    </button>
+                    <button type="button" class="payment-method-btn" data-method="card" style="flex:1; padding: 0.8rem; background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 12px;">
+                        💳 Card
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Amount (UGX) - Minimum 300,000</label>
+                <input type="number" id="depositAmount" min="300000" step="10000" placeholder="300000" style="font-size: 1.2rem;">
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                    <button type="button" class="amount-btn" data-amount="300000">300K</button>
+                    <button type="button" class="amount-btn" data-amount="500000">500K</button>
+                    <button type="button" class="amount-btn" data-amount="1000000">1M</button>
+                    <button type="button" class="amount-btn" data-amount="2000000">2M</button>
+                    <button type="button" class="amount-btn" data-amount="5000000">5M</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="phoneNumber" placeholder="0771234567">
+            </div>
+            
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="emailAddress" placeholder="you@example.com">
+            </div>
+            
+            <button id="initiatePaymentBtn" class="btn-deposit" style="width:100%;">Pay with PesaPal</button>
+            <div id="depositMsg"></div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💸 Request Withdrawal</h3>
+                <span class="close-modal" id="closeWithdrawModal">&times;</span>
+            </div>
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label>Withdrawal Method</label>
+                    <select id="withdrawMethod">
+                        <option>MTN Mobile Money</option>
+                        <option>Airtel Money</option>
+                        <option>Bank Transfer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Phone / Account</label>
+                    <input type="text" id="withdrawPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount (UGX)</label>
+                    <input type="number" id="withdrawAmount" min="100000" required>
+                </div>
+                <div id="balanceDisplay"></div>
+                <button type="submit" class="btn-primary" style="width:100%; background:#1f3b4c;">Request Withdrawal</button>
+                <div id="withdrawMsg"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Investment Modal -->
+    <div id="investModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📈 Make an Investment</h3>
+                <span class="close-modal" id="closeInvestModal">&times;</span>
+            </div>
+            <form id="investForm">
+                <div class="form-group">
+                    <label>Select Plan</label>
+                    <div id="planOptions">
+                        <div class="plan-option" data-plan="Basic" data-rate="2" data-min="300000" style="background:#f8fafc; padding:0.8rem; margin-bottom:0.5rem; cursor:pointer; border:2px solid transparent; border-radius:12px;">
+                            <strong>Basic Plan</strong> - 2% return | Min: UGX 300,000
+                        </div>
+                        <div class="plan-option" data-plan="Growth" data-rate="12" data-min="1000000" style="background:#f8fafc; padding:0.8rem; margin-bottom:0.5rem; cursor:pointer; border:2px solid transparent; border-radius:12px;">
+                            <strong>Growth Plan</strong> - 12% return | Min: UGX 1,000,000
+                        </div>
+                        <div class="plan-option" data-plan="Premium" data-rate="25" data-min="3000000" style="background:#f8fafc; padding:0.8rem; margin-bottom:0.5rem; cursor:pointer; border:2px solid transparent; border-radius:12px;">
+                            <strong>Premium Plan</strong> - 25% return | Min: UGX 3,000,000
+                        </div>
+                        <div class="plan-option" data-plan="VIP" data-rate="50" data-min="10000000" style="background:#f8fafc; padding:0.8rem; margin-bottom:0.5rem; cursor:pointer; border:2px solid transparent; border-radius:12px;">
+                            <strong>VIP Plan</strong> - 50% return | Min: UGX 10,000,000
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Amount (UGX)</label>
+                    <input type="number" id="investAmount" required>
+                </div>
+                <div id="investmentSummary" style="background:#f1f5f9; padding:0.8rem; border-radius:12px; margin:1rem 0;"></div>
+                <button type="submit" class="btn-primary" style="width:100%;">Confirm Investment</button>
+                <div id="investMsg"></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, collection, addDoc, query, orderBy, getDocs, serverTimestamp, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCX-ag3dli4j1DyP4nJKiO58yOEyQy-_5c",
+            authDomain: "invest-foram-platform.firebaseapp.com",
+            projectId: "invest-foram-platform",
+            storageBucket: "invest-foram-platform.firebasestorage.app",
+            messagingSenderId: "284475751069",
+            appId: "1:284475751069:web:008f29e8696f483c19b274"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const API_URL = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1') 
+            ? 'http://localhost:3000' 
+            : 'https://your-backend-url.com';
+
+        let currentUser = null;
+        let currentBalance = 0;
+        let selectedPlan = null;
+
+        function formatCurrency(amount) {
+            return `UGX ${(amount || 0).toLocaleString()}`;
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').classList.toggle('active', show);
+        }
+
+        function showMessage(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = `<div class="${isError ? 'error-message' : 'success-message'}">${message}</div>`;
+                setTimeout(() => element.innerHTML = '', 3000);
+            }
+        }
+
+        async function loadDashboard(user) {
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+                    currentBalance = data.totalBalance || 0;
+                    
+                    document.getElementById('statsGrid').innerHTML = `
+                        <div class="stat-card"><div class="stat-icon">💰</div><div><h3>Balance</h3><div class="stat-value">${formatCurrency(currentBalance)}</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">📈</div><div><h3>Returns</h3><div class="stat-value">${formatCurrency(data.totalReturns || 0)}</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">🏆</div><div><h3>Invested</h3><div class="stat-value">${formatCurrency(data.totalInvested || 0)}</div></div></div>
+                        <div class="stat-card"><div class="stat-icon">⭐</div><div><h3>Plan</h3><div class="stat-value">${data.activePlan || 'None'}</div></div></div>
+                    `;
+                    document.getElementById('referralCode').innerText = data.referralCode || 'N/A';
+                    document.getElementById('referralCount').innerText = data.referrals || 0;
+                    document.getElementById('referralBonus').innerText = formatCurrency(data.referralBonus || 0);
+                    document.getElementById('userName').innerText = `Hi, ${data.fullName?.split(' ')[0] || 'User'}`;
+                    
+                    await loadTransactions(user.uid);
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        async function loadTransactions(userId) {
+            const transRef = collection(db, "users", userId, "transactions");
+            const q = query(transRef, orderBy("date", "desc"));
+            const transSnap = await getDocs(q);
+            const historyDiv = document.getElementById('transactionHistory');
+            if (transSnap.empty) {
+                historyDiv.innerHTML = '<p style="text-align:center; padding:1rem;">No transactions yet</p>';
+            } else {
+                let html = '';
+                transSnap.forEach(doc => {
+                    const t = doc.data();
+                    const date = t.date?.toDate() || new Date();
+                    html += `<div class="investment-item">
+                        <div><strong>${t.type === 'deposit' ? '💰 Deposit' : t.type === 'investment' ? '📈 Investment' : '💸 Withdrawal'}</strong><br><small>${date.toLocaleString()}</small></div>
+                        <div><strong>${t.type === 'withdrawal' ? '-' : '+'} ${formatCurrency(t.amount)}</strong><br><span class="rate-badge">${t.status || 'completed'}</span></div>
+                    </div>`;
+                });
+                historyDiv.innerHTML = html;
+            }
+        }
+
+        // PESA PAL PAYMENT
+        let selectedMethod = null;
+        
+        document.querySelectorAll('.payment-method-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.payment-method-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedMethod = btn.getAttribute('data-method');
+            });
+        });
+        
+        document.querySelectorAll('.amount-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('depositAmount').value = btn.getAttribute('data-amount');
+            });
+        });
+        
+        document.getElementById('initiatePaymentBtn').addEventListener('click', async () => {
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            const phone = document.getElementById('phoneNumber').value;
+            const email = document.getElementById('emailAddress').value;
+            
+            if (!amount || amount < 300000) {
+                showMessage('depositMsg', 'Minimum deposit is UGX 300,000', true);
+                return;
+            }
+            if (!selectedMethod) {
+                showMessage('depositMsg', 'Select payment method', true);
+                return;
+            }
+            if (!phone) {
+                showMessage('depositMsg', 'Enter phone number', true);
+                return;
+            }
+            if (!email) {
+                showMessage('depositMsg', 'Enter email address', true);
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+                const userData = userDoc.data();
+                
+                const response = await fetch(`${API_URL}/api/initiate-payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: amount,
+                        phone: phone,
+                        email: email,
+                        userId: currentUser.uid,
+                        fullName: userData.fullName
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.redirectUrl) {
+                    window.location.href = result.redirectUrl;
+                } else {
+                    throw new Error(result.error || 'Payment initiation failed');
+                }
+            } catch (error) {
+                showLoading(false);
+                showMessage('depositMsg', 'Error: ' + error.message, true);
+            }
+        });
+        
+        // Withdrawal
+        const withdrawModal = document.getElementById('withdrawModal');
+        document.getElementById('withdrawBtn').onclick = () => {
+            document.getElementById('balanceDisplay').innerHTML = `Available: ${formatCurrency(currentBalance)}`;
+            withdrawModal.classList.add('active');
+        };
+        document.getElementById('closeWithdrawModal').onclick = () => withdrawModal.classList.remove('active');
+        
+        document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            const phone = document.getElementById('withdrawPhone').value;
+            
+            if (amount < 100000) {
+                showMessage('withdrawMsg', 'Minimum UGX 100,000', true);
+                return;
+            }
+            if (amount > currentBalance) {
+                showMessage('withdrawMsg', 'Insufficient balance', true);
+                return;
+            }
+            
+            showLoading(true);
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), { totalBalance: currentBalance - amount });
+                await addDoc(collection(db, "users", currentUser.uid, "transactions"), {
+                    type: 'withdrawal', amount, method, phone, status: 'pending', date: serverTimestamp()
+                });
+                showLoading(false);
+                showMessage('withdrawMsg', 'Withdrawal request submitted!', false);
+                setTimeout(() => {
+                    withdrawModal.classList.remove('active');
+                    loadDashboard(currentUser);
+                }, 1500);
+            } catch(e) {
+                showLoading(false);
+                showMessage('withdrawMsg', 'Error: ' + e.message, true);
+            }
+        });
+        
+        // Investment
+        const investModal = document.getElementById('investModal');
+        document.getElementById('investBtn').onclick = () => investModal.classList.add('active');
+        document.getElementById('closeInvestModal').onclick = () => investModal.classList.remove('active');
+        
+        document.querySelectorAll('.plan-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.plan-option').forEach(o => o.style.borderColor = 'transparent');
+                opt.style.borderColor = '#10b981';
+                selectedPlan = {
+                    name: opt.getAttribute('data-plan'),
+                    rate: parseInt(opt.getAttribute('data-rate')),
+                    min: parseInt(opt.getAttribute('data-min'))
+                };
+                updateSummary();
+            });
+        });
+        
+        function updateSummary() {
+            const amount = parseInt(document.getElementById('investAmount').value) || 0;
+            if (selectedPlan) {
+                const expectedReturn = Math.floor(amount * selectedPlan.rate / 100);
+                document.getElementById('investmentSummary').innerHTML = `
+                    <div>Plan: ${selectedPlan.name}</div>
+                    <div>Rate: ${selectedPlan.rate}%</div>
+                    <div>Amount: ${formatCurrency(amount)}</div>
+                    <div style="margin-top:0.5rem;"><strong>Expected Return: ${formatCurrency(expectedReturn)}</strong></div>
+                `;
+            }
+        }
+        document.getElementById('investAmount').addEventListener('input', updateSummary);
+        
+        document.getElementById('investForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!selectedPlan) {
+                showMessage('investMsg', 'Select a plan', true);
+                return;
+            }
+            const amount = parseInt(document.getElementById('investAmount').value);
+            if (amount < selectedPlan.min) {
+                showMessage('investMsg', `Minimum ${formatCurrency(selectedPlan.min)}`, true);
+                return;
+            }
+            if (amount > currentBalance) {
+                showMessage('investMsg', 'Insufficient balance', true);
+                return;
+            }
+            
+            const expectedReturn = Math.floor(amount * selectedPlan.rate / 100);
+            showLoading(true);
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    totalBalance: currentBalance - amount,
+                    totalInvested: increment(amount),
+                    totalReturns: increment(expectedReturn),
+                    activePlan: selectedPlan.name
+                });
+                await addDoc(collection(db, "users", currentUser.uid, "transactions"), {
+                    type: 'investment', amount, plan: selectedPlan.name, rate: selectedPlan.rate,
+                    expectedReturn, status: 'active', date: serverTimestamp()
+                });
+                showLoading(false);
+                showMessage('investMsg', 'Investment successful!', false);
+                setTimeout(() => {
+                    investModal.classList.remove('active');
+                    loadDashboard(currentUser);
+                }, 1500);
+            } catch(e) {
+                showLoading(false);
+                showMessage('investMsg', 'Error: ' + e.message, true);
+            }
+        });
+        
+        // Copy referral code
+        document.getElementById('copyCodeBtn').onclick = () => {
+            navigator.clipboard.writeText(document.getElementById('referralCode').innerText);
+            alert('Referral code copied!');
+        };
+        
+        // Logout
+        document.getElementById('logoutBtn').onclick = async () => {
+            await signOut(auth);
+            window.location.href = 'index.html';
+        };
+        
+        // Modals
+        const depositModal = document.getElementById('depositModal');
+        document.getElementById('depositBtn').onclick = () => depositModal.classList.add('active');
+        document.getElementById('closeDepositModal').onclick = () => depositModal.classList.remove('active');
+        
+        // Auth
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                await loadDashboard(user);
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>
