@@ -392,7 +392,16 @@
     </form>
   </div>
 </div>
+<button onclick="pay()">Pay Now</button>
 
+<script>
+async function pay() {
+  const res = await fetch("https://investforam-ug.onrender.com/pay");
+  const data = await res.json();
+
+  window.location.href = data.url;
+}
+</script>
 <!-- Withdraw Modal -->
 <div id="withdrawModal" class="modal">
   <div class="modal-content">
