@@ -1,51 +1,70 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
+const express = require("express");
+const axios = require("axios");
 
-app.use(cors());
+const app = express();
 app.use(express.json());
 
-// Store received SMS (for testing)
-let lastSMS = null;
+const CONSUMER_KEY = "YOUR_KEY";
+const CONSUMER_SECRET = "YOUR_SECRET";
 
-// This is where SMS Forwarder will send messages
-app.post('/sms', (req, res) => {
-    console.log('SMS Received:', req.body);
-    
-    // Store for viewing
-    lastSMS = {
-        time: new Date().toISOString(),
-        data: req.body
-    };
-    
-    // For now, just log it
-    res.json({ 
-        success: true, 
-        message: 'SMS received',
-        received: req.body 
-    });
+let token = "";
+
+// 🔑 Get token
+async function getToken() {
+  const res = await axios.post(
+    "https://pay.pesapal.com/v3/api/Auth/RequestToken",
+    {
+      consumer_key: CONSUMER_KEY,
+      consumer_secret: CONSUMER_SECRET,
+    }
+  );
+
+  token = res.data.token;
+}
+
+// 💳 Create payment
+app.get("/pay", async (req, res) => {
+  await getToken();
+
+  const response = await axios.post(
+    "https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest",
+    {
+      id: "ORDER_" + Date.now(),
+      currency: "UGX",
+      amount: 1000,
+      description: "Test Payment",
+      callback_url: "https://your-backend-url.onrender.com/callback",
+      notification_id: "YOUR_IPN_ID",
+      billing_address: {
+        email_address: "test@gmail.com",
+        phone_number: "2567XXXXXXXX",
+        country_code: "UG",
+        first_name: "Test",
+        last_name: "User",
+      },
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  res.json({ url: response.data.redirect_url });
 });
 
-// View last SMS (for testing)
-app.get('/last-sms', (req, res) => {
-    res.json(lastSMS || { message: 'No SMS received yet' });
+// 🔔 IPN (VERY IMPORTANT)
+app.post("/ipn", (req, res) => {
+  console.log("IPN RECEIVED:", req.body);
+
+  // Here you update user balance/database
+  res.sendStatus(200);
 });
 
-// Home page
-app.get('/', (req, res) => {
-    res.send(`
-        <html>
-            <head><title>SMS Server</title></head>
-            <body>
-                <h1>SMS Server is Running!</h1>
-                <p>Your webhook URL is: <strong>https://YOUR-APP.onrender.com/sms</strong></p>
-                <p>Send SMS to test: <a href="/last-sms">View last SMS</a></p>
-            </body>
-        </html>
-    `);
+// 🔁 Callback
+app.get("/callback", (req, res) => {
+  console.log("Callback:", req.query);
+  res.send("Payment processed");
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+app.listen(3000, () => console.log("Server running"));
